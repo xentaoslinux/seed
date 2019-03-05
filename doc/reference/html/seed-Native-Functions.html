@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Creating native functions</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="Seed Reference Manual">
+<link rel="up" href="api.html" title="Part III. Seed API Reference">
+<link rel="prev" href="seed-JS-Objects.html" title="Working with JavaScript objects">
+<link rel="next" href="seed-JavaScript-Classes.html" title="Creating JavaScript classes">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="seed-JS-Objects.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="api.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Seed Reference Manual</th>
+<td><a accesskey="n" href="seed-JavaScript-Classes.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#seed-Native-Functions.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#seed-Native-Functions.description" class="shortcut">Description</a>
+</td></tr>
+</table>
+<div class="refentry">
+<a name="seed-Native-Functions"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="seed-Native-Functions.top_of_page"></a>Creating native functions</span></h2>
+<p>Creating native functions — C functions as first-class JavaScript objects</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="seed-Native-Functions.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+#include &lt;seed/seed.h&gt;
+
+<a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           (<a class="link" href="seed-Native-Functions.html#SeedFunctionCallback" title="SeedFunctionCallback ()">*SeedFunctionCallback</a>)             (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> function</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> this_object</code></em>,
+                                                         <em class="parameter"><code><span class="type">gsize</span> argument_count</code></em>,
+                                                         <em class="parameter"><code>const <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> arguments[]</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);
+<a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="returnvalue">SeedObject</span></a>          <a class="link" href="seed-Native-Functions.html#seed-make-function" title="seed_make_function ()">seed_make_function</a>                  (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Functions.html#SeedFunctionCallback" title="SeedFunctionCallback ()"><span class="type">SeedFunctionCallback</span></a> func</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">gchar</span> *name</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="seed-Native-Functions.html#seed-create-function" title="seed_create_function ()">seed_create_function</a>                (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><span class="type">gchar</span> *name</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Functions.html#SeedFunctionCallback" title="SeedFunctionCallback ()"><span class="type">SeedFunctionCallback</span></a> func</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> obj</code></em>);
+</pre>
+</div>
+<div class="refsect1">
+<a name="seed-Native-Functions.description"></a><h2>Description</h2>
+<p>
+Exposing native C functions to JavaScript is one of the fundamental use cases for libseed when used in an embedding environment; if your application cannot be introspected, or you only have a small number of functions to expose, this is the simplest way to do that.
+</p>
+<p>
+All native C callbacks should have the prototype of <a class="link" href="seed-Native-Functions.html#SeedFunctionCallback" title="SeedFunctionCallback ()"><code class="function">SeedFunctionCallback()</code></a>.
+</p>
+<div class="example">
+<a name="idp9574864"></a><p class="title"><b>Example 10. Simple C program which embeds Seed with one exposed function</b></p>
+<div class="example-contents"><pre class="programlisting">
+#include &lt;glib.h&gt;
+#include &lt;seed.h&gt;
+ 
+/* Our function, with the signature of SeedFunctionCallback(); say hello! */
+SeedValue hello_world(SeedContext ctx,
+                      SeedObject function,
+                      SeedObject this_object,
+                      gsize argument_count,
+                      const SeedValue arguments[],
+                      SeedException *exception)
+{
+    g_print("Hello, World!\n");
+    return seed_make_null(ctx);
+}
+ 
+int main(gint argc, gchar ** argv)
+{
+    SeedEngine * eng;
+ 
+    /* Initialize the Seed engine */
+    eng = seed_init(&amp;argc, &amp;argv);
+ 
+    /* Expose a C function to JavaScript */
+    seed_create_function(eng-&gt;context, "hello_world",
+                         (SeedFunctionCallback)hello_world,
+                         eng-&gt;global);
+ 
+    /* Call the newly created JavaScript function */
+    seed_simple_evaluate(eng-&gt;context, "hello_world()", NULL);
+ 
+    return 0;
+}
+</pre></div>
+</div>
+<br class="example-break">
+</div>
+<div class="refsect1">
+<a name="seed-Native-Functions.details"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="SeedFunctionCallback"></a><h3>SeedFunctionCallback ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           (*SeedFunctionCallback)             (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> function</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> this_object</code></em>,
+                                                         <em class="parameter"><code><span class="type">gsize</span> argument_count</code></em>,
+                                                         <em class="parameter"><code>const <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> arguments[]</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);</pre>
+<p>
+All native C function callbacks should use the prototype of
+SeedFunctionCallback.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>function</code></em> :</span></p></td>
+<td>The <a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> representing the function</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>this_object</code></em> :</span></p></td>
+<td>The <a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> representing the "this" object in the caller</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>argument_count</code></em> :</span></p></td>
+<td>The number of arguments passed into the callback</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>arguments</code></em> :</span></p></td>
+<td>An array of <a href="seed-Native-Type-Conversion.html#SeedValue"><span class="type">SeedValues</span></a>; the value of the arguments passed in</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>exception</code></em> :</span></p></td>
+<td>A reference to a <a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a>; use <a class="link" href="seed-Exceptions.html#seed-make-exception" title="seed_make_exception ()"><code class="function">seed_make_exception()</code></a> in order
+to throw a JavaScript exception from the callback.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>The <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> to return to the caller</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-make-function"></a><h3>seed_make_function ()</h3>
+<pre class="programlisting"><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="returnvalue">SeedObject</span></a>          seed_make_function                  (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Functions.html#SeedFunctionCallback" title="SeedFunctionCallback ()"><span class="type">SeedFunctionCallback</span></a> func</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">gchar</span> *name</code></em>);</pre>
+<p>
+Creates a JavaScript object representing a first-class function; when
+the function is called from JavaScript, <em class="parameter"><code>func</code></em> will be called.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A valid <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>func</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Native-Functions.html#SeedFunctionCallback" title="SeedFunctionCallback ()"><span class="type">SeedFunctionCallback</span></a> to implement the function.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>name</code></em> :</span></p></td>
+<td>The name of the function (used in exceptions).</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A <a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> representing the function</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-create-function"></a><h3>seed_create_function ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                seed_create_function                (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><span class="type">gchar</span> *name</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Functions.html#SeedFunctionCallback" title="SeedFunctionCallback ()"><span class="type">SeedFunctionCallback</span></a> func</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> obj</code></em>);</pre>
+<p>
+Creates a JavaScript object representing a first-class function; when
+the function is called from JavaScript, <em class="parameter"><code>func</code></em> will be called. Places
+the created function as the property <em class="parameter"><code>name</code></em> on <em class="parameter"><code>obj</code></em>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A valid <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>name</code></em> :</span></p></td>
+<td>The name of the function (used in exceptions).</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>func</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Native-Functions.html#SeedFunctionCallback" title="SeedFunctionCallback ()"><span class="type">SeedFunctionCallback</span></a> to implement the function.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>obj</code></em> :</span></p></td>
+<td>The <a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> on which to put the function.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.18</div>
+</body>
+</html>

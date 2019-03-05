@@ -1,0 +1,89 @@
+<!-- ##### SECTION Title ##### -->
+Using JavaScript closures
+
+<!-- ##### SECTION Short_Description ##### -->
+Creating and invoking closures over JavaScript functions using GClosure
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+Long description
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### STRUCT SeedClosure ##### -->
+<para>
+
+</para>
+
+@closure: 
+@function: 
+@user_data: 
+@return_type: 
+@description: 
+
+<!-- ##### FUNCTION seed_closure_new ##### -->
+<para>
+
+</para>
+
+@ctx: 
+@function: 
+@user_data: 
+@description: 
+@Returns: 
+
+
+<!-- ##### FUNCTION seed_closure_get_callable ##### -->
+<para>
+
+</para>
+
+@c: 
+@Returns: 
+
+
+<!-- ##### FUNCTION seed_closure_invoke ##### -->
+<para>
+
+</para>
+
+@closure: 
+@args: 
+@argc: 
+@exception: 
+@Returns: 
+
+
+<!-- ##### FUNCTION seed_closure_invoke_with_context ##### -->
+<para>
+
+</para>
+
+@ctx: 
+@closure: 
+@args: 
+@argc: 
+@exception: 
+@Returns: 
+
+
+<!-- ##### FUNCTION seed_closure_warn_exception ##### -->
+<para>
+
+</para>
+
+@c: 
+@ctx: 
+@exception: 
+
+

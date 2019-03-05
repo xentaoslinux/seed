@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Creating JavaScript classes</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="Seed Reference Manual">
+<link rel="up" href="api.html" title="Part III. Seed API Reference">
+<link rel="prev" href="seed-Native-Functions.html" title="Creating native functions">
+<link rel="next" href="seed-SeedClosure.html" title="Using JavaScript closures">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="seed-Native-Functions.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="api.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Seed Reference Manual</th>
+<td><a accesskey="n" href="seed-SeedClosure.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#seed-JavaScript-Classes.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#seed-JavaScript-Classes.description" class="shortcut">Description</a>
+</td></tr>
+</table>
+<div class="refentry">
+<a name="seed-JavaScript-Classes"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="seed-JavaScript-Classes.top_of_page"></a>Creating JavaScript classes</span></h2>
+<p>Creating JavaScript classes — Dealing with Seed class definitions and constructors</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="seed-JavaScript-Classes.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+#include &lt;seed/seed.h&gt;
+
+enum                <a class="link" href="seed-JavaScript-Classes.html#SeedPropertyAttributes" title="enum SeedPropertyAttributes">SeedPropertyAttributes</a>;
+enum                <a class="link" href="seed-JavaScript-Classes.html#SeedClassAttributes" title="enum SeedClassAttributes">SeedClassAttributes</a>;
+typedef             <a class="link" href="seed-JavaScript-Classes.html#SeedClass" title="SeedClass">SeedClass</a>;
+#define             <a class="link" href="seed-JavaScript-Classes.html#seed-empty-class" title="seed_empty_class">seed_empty_class</a>
+<a class="link" href="seed-JavaScript-Classes.html#SeedClass" title="SeedClass"><span class="returnvalue">SeedClass</span></a>           <a class="link" href="seed-JavaScript-Classes.html#seed-create-class" title="seed_create_class ()">seed_create_class</a>                   (<em class="parameter"><code><span class="type">seed_class_definition</span> *def</code></em>);
+<a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="returnvalue">SeedObject</span></a>          <a class="link" href="seed-JavaScript-Classes.html#seed-make-constructor" title="seed_make_constructor ()">seed_make_constructor</a>               (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JavaScript-Classes.html#SeedClass" title="SeedClass"><span class="type">SeedClass</span></a> klass</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObjectCallAsConstructorCallback" title="SeedObjectCallAsConstructorCallback ()"><span class="type">SeedObjectCallAsConstructorCallback</span></a> constructor</code></em>);
+</pre>
+</div>
+<div class="refsect1">
+<a name="seed-JavaScript-Classes.description"></a><h2>Description</h2>
+<p>
+Defining new Seed classes allows for implementing more complex
+behavior than possible with the traditional JavaScript object system
+and default class.
+When writing Seed modules, it is often the best pattern to define many
+of your types through classes and static functions/value.
+Please note that inside the finalize callback of a class, it is not
+legal to call any method requiring a <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> (with the exception
+of protect/unprotect, though it is not guaranteed this will continue
+to work with future versions of JSCore).
+</p>
+</div>
+<div class="refsect1">
+<a name="seed-JavaScript-Classes.details"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="SeedPropertyAttributes"></a><h3>enum SeedPropertyAttributes</h3>
+<pre class="programlisting">typedef enum {
+  SEED_PROPERTY_ATTRIBUTE_NONE = 0,
+  SEED_PROPERTY_ATTRIBUTE_READ_ONLY = 1 &lt;&lt; 1,
+  SEED_PROPERTY_ATTRIBUTE_DONT_ENUM = 1 &lt;&lt; 2,
+  SEED_PROPERTY_ATTRIBUTE_DONT_DELETE = 1 &lt;&lt; 3
+} SeedPropertyAttributes;
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="SeedClassAttributes"></a><h3>enum SeedClassAttributes</h3>
+<pre class="programlisting">typedef enum {
+  SEED_CLASS_ATTRIBUTE_NONE = 0,
+  SEED_CLASS_ATTRIBUTE_NO_SHARED_PROTOTYPE = 1 &lt;&lt; 1
+} SeedClassAttributes;
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="SeedClass"></a><h3>SeedClass</h3>
+<pre class="programlisting">typedef gpointer SeedClass;
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-empty-class"></a><h3>seed_empty_class</h3>
+<pre class="programlisting">#define seed_empty_class { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,};
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-create-class"></a><h3>seed_create_class ()</h3>
+<pre class="programlisting"><a class="link" href="seed-JavaScript-Classes.html#SeedClass" title="SeedClass"><span class="returnvalue">SeedClass</span></a>           seed_create_class                   (<em class="parameter"><code><span class="type">seed_class_definition</span> *def</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>def</code></em> :</span></p></td>
+<td>A <span class="type">JSClassDefinition</span>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A <a class="link" href="seed-JavaScript-Classes.html#SeedClass" title="SeedClass"><span class="type">SeedClass</span></a>, described by <em class="parameter"><code>def</code></em>.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-make-constructor"></a><h3>seed_make_constructor ()</h3>
+<pre class="programlisting"><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="returnvalue">SeedObject</span></a>          seed_make_constructor               (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JavaScript-Classes.html#SeedClass" title="SeedClass"><span class="type">SeedClass</span></a> klass</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObjectCallAsConstructorCallback" title="SeedObjectCallAsConstructorCallback ()"><span class="type">SeedObjectCallAsConstructorCallback</span></a> constructor</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>constructor</code></em> :</span></p></td>
+<td>The <span class="type">JSObjectCallAsConstructorCallback</span> function to call when
+the constructor is invoked with 'new'.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A <a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a>, which is a constructor function.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.18</div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Importer</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="Seed Reference Manual">
+<link rel="up" href="js.html" title="Part II. Seed JavaScript Reference">
+<link rel="prev" href="js.html" title="Part II. Seed JavaScript Reference">
+<link rel="next" href="api.html" title="Part III. Seed API Reference">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2"><tr valign="middle">
+<td><a accesskey="p" href="js.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="js.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Seed Reference Manual</th>
+<td><a accesskey="n" href="api.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry">
+<a name="seed-importer"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle">Importer</span></h2>
+<p>Importer — 
+Importing gobject-introspection namespaces, native modules, and JavaScript modules
+</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsect1">
+<a name="git"></a><h2>Overview</h2>
+<p>The Seed importer provides a way for applications written in JavaScript to reference functions outside of the current file. This is the heart of Seed's ability to work with other parts of the GNOME stack, as well as a way to write reasonably structured and sensible complex applications from JavaScript. The importer allows access to four types of external objects:</p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">GObject-Introspection namespaces, which provide access to functiosn and data which were scanned using gobject-introspection from other C libraries; this is how one accesses most of the libraries of the GNOME stack from JavaScript</li>
+<li class="listitem">Native modules, which provide a way to load arbitrary shared libraries tailored explicitly to the Seed API, which often offer much higher performance for critical code, or provide an easy way to bind code (by hand) which the introspection scanner cannot parse.</li>
+<li class="listitem">JavaScript modules, which provide a way to access (in a namespaced manner) the global object of another script, offering a simple way to modularize code written against Seed.</li>
+<li class="listitem">Directories, which simply contain, as properties on the object the importer returns, the contents of the directory. (expand, fix. this is confusing and misplaced)</li>
+</ul></div>
+<p>The global 'imports' object represents the runtime-side portion of the importer; all of your interactions with the importer will take place through this object.</p>
+</div>
+<div class="refsect1">
+<a name="idp4561216"></a><h2>The Imports Search Path</h2>
+<p>The path which the importer searches for native modules and JavaScript modules is defined by the searchPath property on the 'imports' global. This should be a JavaScript array of strings representing the order and locations to search for these modules; the default set of paths includes various Seed system directories, the directory in which the currently running script is located, and the current directory, in that order. You can change the path at any time; if an invalid value is assigned, the importer will throw an exception the next time something is imported, <span class="emphasis"><em>not</em></span> when the property is set.</p>
+<div class="example">
+<a name="idm40224"></a><p class="title"><b>Example 1. Adding a directory to the search path</b></p>
+<div class="example-contents"><pre class="programlisting">
+imports.searchPath.unshift("/usr/local/share/random-seed-program-scripts/");
+</pre></div>
+</div>
+<br class="example-break">
+</div>
+<div class="refsect1">
+<a name="idm38736"></a><h2>Importing GObject-Introspection namespaces</h2>
+<p>GObject-Introspection provides the metadata required in order to call functions, connect to signals, and interact with properties within any library which has been scanned. The hows and whys of introspection are outside of the scope of this article, but how to utilize this data is central to the very tenents of Seed (the minimal platform possible to interact with GObject-based libraries from a pleasant language).</p>
+<p>Namespaces are loaded as requested, and are loaded only once throughout the lifetime of a Seed program (subsequent requests for the same namespace will return the same object provided previously). The special property 'gi' on the imports global represents the interface for loading these namespaces. A request to import Gtk might look like the following:</p>
+<div class="example">
+<a name="idm36400"></a><p class="title"><b>Example 2. Using 'imports.gi' to import the Gtk namespace</b></p>
+<div class="example-contents"><pre class="programlisting">
+Gtk = imports.gi.Gtk;
+</pre></div>
+</div>
+<br class="example-break"><p>This will import the Gtk namespace from GObject-Introspection, and assign it to the global "Gtk" object. Afterwards, Gtk-related functions can be accessed as properties of said object. Imports will <span class="emphasis"><em>never</em></span> add values to the global object or affect anything outside of their namespace.</p>
+<p>By default, 'imports.gi.NameSpace' will return the most recent installed version of the imported namespace; in order to request a different version, or to mark your program as requiring a particular version, the "imports.gi.versions.NameSpace" property can be set. Keep in mind that versioning for GObject-Introspection namespaces is slightly different from the actual library version numbers; for example, the version for Gtk is still "2.0", even though we're many versions past that. The import will raise an exception if the requested version could not be loaded:</p>
+<div class="example">
+<a name="idm33056"></a><p class="title"><b>Example 3. Using 'imports.gi.versions' to require Clutter 0.8</b></p>
+<div class="example-contents"><pre class="programlisting">
+imports.gi.versions.Clutter = "0.8";
+
+try
+{
+    Clutter = imports.gi.Clutter;
+}
+catch(e)
+{
+    print("Clutter 0.8 is not installed!");
+}
+</pre></div>
+</div>
+<br class="example-break">
+</div>
+<div class="refsect1">
+<a name="idm31456"></a><h2>Importing Native Modules</h2>
+<p>Seed ships with a number of (link!) native modules, which provide access to various parts of the system which GObject-Introspection cannot provide proper metadata for. An application developer could also decide to write performance-critical parts of their code as a native Seed module, as well, as one of the numerous ways to interface C with Seed.</p>
+<p>Native modules are loaded just like GObject-Introspection namespaces, except as toplevel objects on "imports", instead of "imports.gi". For example, to load the readline module that ships with Seed, one could:</p>
+<div class="example">
+<a name="idm29280"></a><p class="title"><b>Example 4. Loading the native module "readline"</b></p>
+<div class="example-contents"><pre class="programlisting">
+readline = imports.readline;
+</pre></div>
+</div>
+<br class="example-break"><p>Seed searches the imports search path for native modules; if it finds a file with the given name, the prefix "seed_" and the same suffix as is used for shared libraries on your system (.so on Linux, .dylib on Mac OS X, etc.), it will assume this is a native module and load and initialize it as such. For example, the readline module loaded above is named <code class="filename">seed_readline.so</code> on a recent Linux machine.</p>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.18</div>
+</body>
+</html>

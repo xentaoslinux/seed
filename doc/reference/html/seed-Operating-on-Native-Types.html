@@ -1,0 +1,344 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Operating on JavaScript types</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="Seed Reference Manual">
+<link rel="up" href="types.html" title="Values and Type Conversion">
+<link rel="prev" href="seed-Native-Type-Conversion.html" title="Type Conversion">
+<link rel="next" href="seed-JS-Objects.html" title="Working with JavaScript objects">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="seed-Native-Type-Conversion.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="types.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Seed Reference Manual</th>
+<td><a accesskey="n" href="seed-JS-Objects.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#seed-Operating-on-Native-Types.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#seed-Operating-on-Native-Types.description" class="shortcut">Description</a>
+</td></tr>
+</table>
+<div class="refentry">
+<a name="seed-Operating-on-Native-Types"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="seed-Operating-on-Native-Types.top_of_page"></a>Operating on JavaScript types</span></h2>
+<p>Operating on JavaScript types — Determining the type of a SeedValue</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="seed-Operating-on-Native-Types.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+#include &lt;seed/seed.h&gt;
+
+<span class="returnvalue">void</span>                <a class="link" href="seed-Operating-on-Native-Types.html#seed-value-unprotect" title="seed_value_unprotect ()">seed_value_unprotect</a>                (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="seed-Operating-on-Native-Types.html#seed-value-protect" title="seed_value_protect ()">seed_value_protect</a>                  (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>);
+<span class="returnvalue">gboolean</span>            <a class="link" href="seed-Operating-on-Native-Types.html#seed-value-is-undefined" title="seed_value_is_undefined ()">seed_value_is_undefined</a>             (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>);
+<span class="returnvalue">gboolean</span>            <a class="link" href="seed-Operating-on-Native-Types.html#seed-value-is-null" title="seed_value_is_null ()">seed_value_is_null</a>                  (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>);
+<span class="returnvalue">gboolean</span>            <a class="link" href="seed-Operating-on-Native-Types.html#seed-value-is-function" title="seed_value_is_function ()">seed_value_is_function</a>              (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> value</code></em>);
+<span class="returnvalue">gboolean</span>            <a class="link" href="seed-Operating-on-Native-Types.html#seed-value-is-number" title="seed_value_is_number ()">seed_value_is_number</a>                (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>);
+<span class="returnvalue">gboolean</span>            <a class="link" href="seed-Operating-on-Native-Types.html#seed-value-is-string" title="seed_value_is_string ()">seed_value_is_string</a>                (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>);
+<span class="returnvalue">gboolean</span>            <a class="link" href="seed-Operating-on-Native-Types.html#seed-value-is-object-of-class" title="seed_value_is_object_of_class ()">seed_value_is_object_of_class</a>       (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JavaScript-Classes.html#SeedClass" title="SeedClass"><span class="type">SeedClass</span></a> klass</code></em>);
+<span class="returnvalue">gboolean</span>            <a class="link" href="seed-Operating-on-Native-Types.html#seed-value-is-object" title="seed_value_is_object ()">seed_value_is_object</a>                (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>);
+<a class="link" href="seed-Native-Type-Conversion.html#SeedType" title="enum SeedType"><span class="returnvalue">SeedType</span></a>            <a class="link" href="seed-Operating-on-Native-Types.html#seed-value-get-type" title="seed_value_get_type ()">seed_value_get_type</a>                 (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>);
+</pre>
+</div>
+<div class="refsect1">
+<a name="seed-Operating-on-Native-Types.description"></a><h2>Description</h2>
+<p>
+Long description
+</p>
+</div>
+<div class="refsect1">
+<a name="seed-Operating-on-Native-Types.details"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="seed-value-unprotect"></a><h3>seed_value_unprotect ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                seed_value_unprotect                (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>);</pre>
+<p>
+Decrements the "protection count" of <em class="parameter"><code>value</code></em>, as explained in
+<a class="link" href="seed-Operating-on-Native-Types.html#seed-value-protect" title="seed_value_protect ()"><code class="function">seed_value_protect()</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
+<td>The <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> to unprotect.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-value-protect"></a><h3>seed_value_protect ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                seed_value_protect                  (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>);</pre>
+<p>
+Increments the "protection count" of <em class="parameter"><code>value</code></em>, in case you want to store
+a reference somewhere where the garbage collector won't be able to find it,
+and don't want it to be collected!
+</p>
+<p>
+In order for <em class="parameter"><code>value</code></em> to be collected afterwards, it will need to be
+unprotected the same number of times with <a class="link" href="seed-Operating-on-Native-Types.html#seed-value-unprotect" title="seed_value_unprotect ()"><code class="function">seed_value_unprotect()</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
+<td>The <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> to protect.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-value-is-undefined"></a><h3>seed_value_is_undefined ()</h3>
+<pre class="programlisting"><span class="returnvalue">gboolean</span>            seed_value_is_undefined             (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>);</pre>
+<p>
+Determine whether or not <em class="parameter"><code>value</code></em> represents the JavaScript undefined value
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A <span class="type">gboolean</span> (<code class="literal">true</code> if <em class="parameter"><code>value</code></em> is 'undefined')</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-value-is-null"></a><h3>seed_value_is_null ()</h3>
+<pre class="programlisting"><span class="returnvalue">gboolean</span>            seed_value_is_null                  (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>);</pre>
+<p>
+Determine whether or not <em class="parameter"><code>value</code></em> represents the JavaScript null value
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A <span class="type">gboolean</span> (<code class="literal">true</code> if <em class="parameter"><code>value</code></em> is 'null')</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-value-is-function"></a><h3>seed_value_is_function ()</h3>
+<pre class="programlisting"><span class="returnvalue">gboolean</span>            seed_value_is_function              (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> value</code></em>);</pre>
+<p>
+Determine whether or not <em class="parameter"><code>value</code></em> is a JavaScript function (and, therefore,
+an object)
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A <span class="type">gboolean</span> (<code class="literal">true</code> if <em class="parameter"><code>value</code></em> is a function)</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-value-is-number"></a><h3>seed_value_is_number ()</h3>
+<pre class="programlisting"><span class="returnvalue">gboolean</span>            seed_value_is_number                (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>);</pre>
+<p>
+Determine whether or not <em class="parameter"><code>value</code></em> is a JavaScript number
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A <span class="type">gboolean</span> (<code class="literal">true</code> if <em class="parameter"><code>value</code></em> is a number)</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-value-is-string"></a><h3>seed_value_is_string ()</h3>
+<pre class="programlisting"><span class="returnvalue">gboolean</span>            seed_value_is_string                (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>);</pre>
+<p>
+Determine whether or not <em class="parameter"><code>value</code></em> is a JavaScript string
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A <span class="type">gboolean</span> (<code class="literal">true</code> if <em class="parameter"><code>value</code></em> is a string)</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-value-is-object-of-class"></a><h3>seed_value_is_object_of_class ()</h3>
+<pre class="programlisting"><span class="returnvalue">gboolean</span>            seed_value_is_object_of_class       (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JavaScript-Classes.html#SeedClass" title="SeedClass"><span class="type">SeedClass</span></a> klass</code></em>);</pre>
+<p>
+Determine whether or not <em class="parameter"><code>value</code></em> is an object of the specified class
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>klass</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-JavaScript-Classes.html#SeedClass" title="SeedClass"><span class="type">SeedClass</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A <span class="type">gboolean</span> (<code class="literal">true</code> if <em class="parameter"><code>value</code></em> is of class <em class="parameter"><code>klass</code></em>)</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-value-is-object"></a><h3>seed_value_is_object ()</h3>
+<pre class="programlisting"><span class="returnvalue">gboolean</span>            seed_value_is_object                (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>);</pre>
+<p>
+Determine whether or not <em class="parameter"><code>value</code></em> is a JavaScript object
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A <span class="type">gboolean</span> (<code class="literal">true</code> if <em class="parameter"><code>value</code></em> is an object)</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-value-get-type"></a><h3>seed_value_get_type ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Native-Type-Conversion.html#SeedType" title="enum SeedType"><span class="returnvalue">SeedType</span></a>            seed_value_get_type                 (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A valid <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>The type of <em class="parameter"><code>value</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.18</div>
+</body>
+</html>

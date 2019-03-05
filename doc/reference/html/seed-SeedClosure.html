@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Using JavaScript closures</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="Seed Reference Manual">
+<link rel="up" href="api.html" title="Part III. Seed API Reference">
+<link rel="prev" href="seed-JavaScript-Classes.html" title="Creating JavaScript classes">
+<link rel="next" href="seed-Modules.html" title="Seed Modules">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="seed-JavaScript-Classes.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="api.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Seed Reference Manual</th>
+<td><a accesskey="n" href="seed-Modules.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#seed-SeedClosure.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#seed-SeedClosure.description" class="shortcut">Description</a>
+</td></tr>
+</table>
+<div class="refentry">
+<a name="seed-SeedClosure"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="seed-SeedClosure.top_of_page"></a>Using JavaScript closures</span></h2>
+<p>Using JavaScript closures — Creating and invoking closures over JavaScript functions using GClosure</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="seed-SeedClosure.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+#include &lt;seed/seed.h&gt;
+
+struct              <a class="link" href="seed-SeedClosure.html#SeedClosure" title="struct SeedClosure">SeedClosure</a>;
+<span class="returnvalue">GClosure</span> *          <a class="link" href="seed-SeedClosure.html#seed-closure-new" title="seed_closure_new ()">seed_closure_new</a>                    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> function</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> user_data</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">gchar</span> *description</code></em>);
+<a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="returnvalue">SeedObject</span></a>          <a class="link" href="seed-SeedClosure.html#seed-closure-get-callable" title="seed_closure_get_callable ()">seed_closure_get_callable</a>           (<em class="parameter"><code><span class="type">GClosure</span> *c</code></em>);
+<a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           <a class="link" href="seed-SeedClosure.html#seed-closure-invoke" title="seed_closure_invoke ()">seed_closure_invoke</a>                 (<em class="parameter"><code><span class="type">GClosure</span> *closure</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> *args</code></em>,
+                                                         <em class="parameter"><code><span class="type">guint</span> argc</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);
+<a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           <a class="link" href="seed-SeedClosure.html#seed-closure-invoke-with-context" title="seed_closure_invoke_with_context ()">seed_closure_invoke_with_context</a>    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><span class="type">GClosure</span> *closure</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> *args</code></em>,
+                                                         <em class="parameter"><code><span class="type">guint</span> argc</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="seed-SeedClosure.html#seed-closure-warn-exception" title="seed_closure_warn_exception ()">seed_closure_warn_exception</a>         (<em class="parameter"><code><span class="type">GClosure</span> *c</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> exception</code></em>);
+</pre>
+</div>
+<div class="refsect1">
+<a name="seed-SeedClosure.description"></a><h2>Description</h2>
+<p>
+Long description
+</p>
+</div>
+<div class="refsect1">
+<a name="seed-SeedClosure.details"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="SeedClosure"></a><h3>struct SeedClosure</h3>
+<pre class="programlisting">struct SeedClosure {
+  GClosure closure;
+
+  JSObjectRef function;
+  JSValueRef user_data;
+
+  GType return_type;
+  gchar *description;
+};
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-closure-new"></a><h3>seed_closure_new ()</h3>
+<pre class="programlisting"><span class="returnvalue">GClosure</span> *          seed_closure_new                    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> function</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> user_data</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">gchar</span> *description</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-closure-get-callable"></a><h3>seed_closure_get_callable ()</h3>
+<pre class="programlisting"><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="returnvalue">SeedObject</span></a>          seed_closure_get_callable           (<em class="parameter"><code><span class="type">GClosure</span> *c</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-closure-invoke"></a><h3>seed_closure_invoke ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           seed_closure_invoke                 (<em class="parameter"><code><span class="type">GClosure</span> *closure</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> *args</code></em>,
+                                                         <em class="parameter"><code><span class="type">guint</span> argc</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-closure-invoke-with-context"></a><h3>seed_closure_invoke_with_context ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           seed_closure_invoke_with_context    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><span class="type">GClosure</span> *closure</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> *args</code></em>,
+                                                         <em class="parameter"><code><span class="type">guint</span> argc</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-closure-warn-exception"></a><h3>seed_closure_warn_exception ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                seed_closure_warn_exception         (<em class="parameter"><code><span class="type">GClosure</span> *c</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> exception</code></em>);</pre>
+<p>
+</p>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.18</div>
+</body>
+</html>

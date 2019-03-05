@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE book PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "">
+<book xmlns="http://www.devhelp.net/book" title="Seed Reference Manual" link="index.html" author="" name="seed" version="2" language="c">
+  <chapters>
+    <sub name="Seed Overview" link="seed.html">
+      <sub name="Introduction" link="seed-introduction.html"/>
+      <sub name="Compiling Seed" link="seed-building.html"/>
+      <sub name="Contact Information" link="seed-contact.html"/>
+    </sub>
+    <sub name="Seed JavaScript Reference" link="js.html">
+      <sub name="Importer" link="seed-importer.html"/>
+    </sub>
+    <sub name="Seed API Reference" link="api.html">
+      <sub name="Initialization" link="seed-Initialization.html"/>
+      <sub name="Working with Contexts" link="seed-Contexts.html"/>
+      <sub name="Evaluating JavaScript" link="seed-Evaluation.html"/>
+      <sub name="Exception Handling" link="seed-Exceptions.html"/>
+      <sub name="GObject Signals" link="seed-Signals.html"/>
+      <sub name="Values and Type Conversion" link="types.html">
+        <sub name="Type Conversion" link="seed-Native-Type-Conversion.html"/>
+        <sub name="Operating on JavaScript types" link="seed-Operating-on-Native-Types.html"/>
+        <sub name="Working with JavaScript objects" link="seed-JS-Objects.html"/>
+      </sub>
+      <sub name="Creating native functions" link="seed-Native-Functions.html"/>
+      <sub name="Creating JavaScript classes" link="seed-JavaScript-Classes.html"/>
+      <sub name="Using JavaScript closures" link="seed-SeedClosure.html"/>
+      <sub name="Seed Modules" link="seed-Modules.html"/>
+    </sub>
+    <sub name="Seed Module Reference" link="modules.html">
+      <sub name="readline" link="readline-module.html"/>
+      <sub name="SQLite" link="sqlite-module.html"/>
+      <sub name="GtkBuilder" link="GtkBuilder-module.html"/>
+      <sub name="Sandbox" link="Sandbox-module.html"/>
+    </sub>
+    <sub name="Index" link="ix01.html"/>
+  </chapters>
+  <functions>
+    <keyword type="struct" name="struct SeedEngine" link="seed-Initialization.html#SeedEngine"/>
+    <keyword type="function" name="seed_init ()" link="seed-Initialization.html#seed-init"/>
+    <keyword type="function" name="seed_init_with_context_group ()" link="seed-Initialization.html#seed-init-with-context-group"/>
+    <keyword type="function" name="seed_engine_set_search_path ()" link="seed-Initialization.html#seed-engine-set-search-path"/>
+    <keyword type="function" name="seed_engine_get_search_path ()" link="seed-Initialization.html#seed-engine-get-search-path"/>
+    <keyword type="typedef" name="SeedContext" link="seed-Contexts.html#SeedContext"/>
+    <keyword type="typedef" name="SeedGlobalContext" link="seed-Contexts.html#SeedGlobalContext"/>
+    <keyword type="typedef" name="SeedContextGroup" link="seed-Contexts.html#SeedContextGroup"/>
+    <keyword type="function" name="seed_context_create ()" link="seed-Contexts.html#seed-context-create"/>
+    <keyword type="function" name="seed_context_ref ()" link="seed-Contexts.html#seed-context-ref"/>
+    <keyword type="function" name="seed_context_unref ()" link="seed-Contexts.html#seed-context-unref"/>
+    <keyword type="function" name="seed_context_collect ()" link="seed-Contexts.html#seed-context-collect"/>
+    <keyword type="function" name="seed_context_get_global_object ()" link="seed-Contexts.html#seed-context-get-global-object"/>
+    <keyword type="function" name="seed_prepare_global_context ()" link="seed-Contexts.html#seed-prepare-global-context"/>
+    <keyword type="function" name="seed_importer_add_global ()" link="seed-Contexts.html#seed-importer-add-global"/>
+    <keyword type="function" name="seed_importer_set_search_path ()" link="seed-Contexts.html#seed-importer-set-search-path"/>
+    <keyword type="struct" name="SeedScript" link="seed-Evaluation.html#SeedScript"/>
+    <keyword type="function" name="seed_make_script ()" link="seed-Evaluation.html#seed-make-script"/>
+    <keyword type="function" name="seed_evaluate ()" link="seed-Evaluation.html#seed-evaluate"/>
+    <keyword type="function" name="seed_simple_evaluate ()" link="seed-Evaluation.html#seed-simple-evaluate"/>
+    <keyword type="function" name="seed_script_new_from_file ()" link="seed-Evaluation.html#seed-script-new-from-file"/>
+    <keyword type="function" name="seed_script_exception ()" link="seed-Evaluation.html#seed-script-exception"/>
+    <keyword type="function" name="seed_script_destroy ()" link="seed-Evaluation.html#seed-script-destroy"/>
+    <keyword type="typedef" name="SeedException" link="seed-Exceptions.html#SeedException"/>
+    <keyword type="function" name="seed_make_exception ()" link="seed-Exceptions.html#seed-make-exception"/>
+    <keyword type="function" name="seed_exception_get_name ()" link="seed-Exceptions.html#seed-exception-get-name"/>
+    <keyword type="function" name="seed_exception_get_message ()" link="seed-Exceptions.html#seed-exception-get-message"/>
+    <keyword type="function" name="seed_exception_get_line ()" link="seed-Exceptions.html#seed-exception-get-line"/>
+    <keyword type="function" name="seed_exception_get_file ()" link="seed-Exceptions.html#seed-exception-get-file"/>
+    <keyword type="function" name="seed_exception_to_string ()" link="seed-Exceptions.html#seed-exception-to-string"/>
+    <keyword type="function" name="seed_signal_connect ()" link="seed-Signals.html#seed-signal-connect"/>
+    <keyword type="function" name="seed_signal_connect_value ()" link="seed-Signals.html#seed-signal-connect-value"/>
+    <keyword type="typedef" name="SeedValue" link="seed-Native-Type-Conversion.html#SeedValue"/>
+    <keyword type="enum" name="enum SeedType" link="seed-Native-Type-Conversion.html#SeedType"/>
+    <keyword type="function" name="seed_make_undefined ()" link="seed-Native-Type-Conversion.html#seed-make-undefined"/>
+    <keyword type="function" name="seed_make_null ()" link="seed-Native-Type-Conversion.html#seed-make-null"/>
+    <keyword type="function" name="seed_value_to_boolean ()" link="seed-Native-Type-Conversion.html#seed-value-to-boolean"/>
+    <keyword type="function" name="seed_value_from_boolean ()" link="seed-Native-Type-Conversion.html#seed-value-from-boolean"/>
+    <keyword type="function" name="seed_value_to_uint ()" link="seed-Native-Type-Conversion.html#seed-value-to-uint"/>
+    <keyword type="function" name="seed_value_from_uint ()" link="seed-Native-Type-Conversion.html#seed-value-from-uint"/>
+    <keyword type="function" name="seed_value_to_int ()" link="seed-Native-Type-Conversion.html#seed-value-to-int"/>
+    <keyword type="function" name="seed_value_from_int ()" link="seed-Native-Type-Conversion.html#seed-value-from-int"/>
+    <keyword type="function" name="seed_value_to_char ()" link="seed-Native-Type-Conversion.html#seed-value-to-char"/>
+    <keyword type="function" name="seed_value_from_char ()" link="seed-Native-Type-Conversion.html#seed-value-from-char"/>
+    <keyword type="function" name="seed_value_to_uchar ()" link="seed-Native-Type-Conversion.html#seed-value-to-uchar"/>
+    <keyword type="function" name="seed_value_from_uchar ()" link="seed-Native-Type-Conversion.html#seed-value-from-uchar"/>
+    <keyword type="function" name="seed_value_to_long ()" link="seed-Native-Type-Conversion.html#seed-value-to-long"/>
+    <keyword type="function" name="seed_value_from_long ()" link="seed-Native-Type-Conversion.html#seed-value-from-long"/>
+    <keyword type="function" name="seed_value_to_ulong ()" link="seed-Native-Type-Conversion.html#seed-value-to-ulong"/>
+    <keyword type="function" name="seed_value_from_ulong ()" link="seed-Native-Type-Conversion.html#seed-value-from-ulong"/>
+    <keyword type="function" name="seed_value_to_int64 ()" link="seed-Native-Type-Conversion.html#seed-value-to-int64"/>
+    <keyword type="function" name="seed_value_from_int64 ()" link="seed-Native-Type-Conversion.html#seed-value-from-int64"/>
+    <keyword type="function" name="seed_value_to_uint64 ()" link="seed-Native-Type-Conversion.html#seed-value-to-uint64"/>
+    <keyword type="function" name="seed_value_from_uint64 ()" link="seed-Native-Type-Conversion.html#seed-value-from-uint64"/>
+    <keyword type="function" name="seed_value_to_float ()" link="seed-Native-Type-Conversion.html#seed-value-to-float"/>
+    <keyword type="function" name="seed_value_from_float ()" link="seed-Native-Type-Conversion.html#seed-value-from-float"/>
+    <keyword type="function" name="seed_value_to_double ()" link="seed-Native-Type-Conversion.html#seed-value-to-double"/>
+    <keyword type="function" name="seed_value_from_double ()" link="seed-Native-Type-Conversion.html#seed-value-from-double"/>
+    <keyword type="function" name="seed_value_to_string ()" link="seed-Native-Type-Conversion.html#seed-value-to-string"/>
+    <keyword type="function" name="seed_value_from_string ()" link="seed-Native-Type-Conversion.html#seed-value-from-string"/>
+    <keyword type="function" name="seed_value_from_binary_string ()" link="seed-Native-Type-Conversion.html#seed-value-from-binary-string"/>
+    <keyword type="function" name="seed_value_to_object ()" link="seed-Native-Type-Conversion.html#seed-value-to-object"/>
+    <keyword type="function" name="seed_value_from_object ()" link="seed-Native-Type-Conversion.html#seed-value-from-object"/>
+    <keyword type="function" name="seed_value_to_filename ()" link="seed-Native-Type-Conversion.html#seed-value-to-filename"/>
+    <keyword type="function" name="seed_value_from_filename ()" link="seed-Native-Type-Conversion.html#seed-value-from-filename"/>
+    <keyword type="function" name="seed_value_to_format ()" link="seed-Native-Type-Conversion.html#seed-value-to-format"/>
+    <keyword type="function" name="seed_pointer_get_pointer ()" link="seed-Native-Type-Conversion.html#seed-pointer-get-pointer"/>
+    <keyword type="function" name="seed_make_pointer ()" link="seed-Native-Type-Conversion.html#seed-make-pointer"/>
+    <keyword type="typedef" name="SeedString" link="seed-Native-Type-Conversion.html#SeedString"/>
+    <keyword type="function" name="seed_string_ref ()" link="seed-Native-Type-Conversion.html#seed-string-ref"/>
+    <keyword type="function" name="seed_string_unref ()" link="seed-Native-Type-Conversion.html#seed-string-unref"/>
+    <keyword type="function" name="seed_string_get_maximum_size ()" link="seed-Native-Type-Conversion.html#seed-string-get-maximum-size"/>
+    <keyword type="function" name="seed_string_to_utf8_buffer ()" link="seed-Native-Type-Conversion.html#seed-string-to-utf8-buffer"/>
+    <keyword type="function" name="seed_string_is_equal ()" link="seed-Native-Type-Conversion.html#seed-string-is-equal"/>
+    <keyword type="function" name="seed_string_is_equal_utf8 ()" link="seed-Native-Type-Conversion.html#seed-string-is-equal-utf8"/>
+    <keyword type="function" name="seed_value_unprotect ()" link="seed-Operating-on-Native-Types.html#seed-value-unprotect"/>
+    <keyword type="function" name="seed_value_protect ()" link="seed-Operating-on-Native-Types.html#seed-value-protect"/>
+    <keyword type="function" name="seed_value_is_undefined ()" link="seed-Operating-on-Native-Types.html#seed-value-is-undefined"/>
+    <keyword type="function" name="seed_value_is_null ()" link="seed-Operating-on-Native-Types.html#seed-value-is-null"/>
+    <keyword type="function" name="seed_value_is_function ()" link="seed-Operating-on-Native-Types.html#seed-value-is-function"/>
+    <keyword type="function" name="seed_value_is_number ()" link="seed-Operating-on-Native-Types.html#seed-value-is-number"/>
+    <keyword type="function" name="seed_value_is_string ()" link="seed-Operating-on-Native-Types.html#seed-value-is-string"/>
+    <keyword type="function" name="seed_value_is_object_of_class ()" link="seed-Operating-on-Native-Types.html#seed-value-is-object-of-class"/>
+    <keyword type="function" name="seed_value_is_object ()" link="seed-Operating-on-Native-Types.html#seed-value-is-object"/>
+    <keyword type="function" name="seed_value_get_type ()" link="seed-Operating-on-Native-Types.html#seed-value-get-type"/>
+    <keyword type="typedef" name="SeedObject" link="seed-JS-Objects.html#SeedObject"/>
+    <keyword type="function" name="seed_make_object ()" link="seed-JS-Objects.html#seed-make-object"/>
+    <keyword type="function" name="seed_make_array ()" link="seed-JS-Objects.html#seed-make-array"/>
+    <keyword type="function" name="seed_object_call ()" link="seed-JS-Objects.html#seed-object-call"/>
+    <keyword type="function" name="seed_object_set_property_at_index ()" link="seed-JS-Objects.html#seed-object-set-property-at-index"/>
+    <keyword type="function" name="seed_object_get_property_at_index ()" link="seed-JS-Objects.html#seed-object-get-property-at-index"/>
+    <keyword type="function" name="seed_object_is_of_class ()" link="seed-JS-Objects.html#seed-object-is-of-class"/>
+    <keyword type="function" name="seed_object_get_private ()" link="seed-JS-Objects.html#seed-object-get-private"/>
+    <keyword type="function" name="seed_object_set_private ()" link="seed-JS-Objects.html#seed-object-set-private"/>
+    <keyword type="function" name="seed_object_get_property ()" link="seed-JS-Objects.html#seed-object-get-property"/>
+    <keyword type="function" name="seed_object_set_property ()" link="seed-JS-Objects.html#seed-object-set-property"/>
+    <keyword type="function" name="seed_object_get_prototype ()" link="seed-JS-Objects.html#seed-object-get-prototype"/>
+    <keyword type="function" name="seed_object_copy_property_names ()" link="seed-JS-Objects.html#seed-object-copy-property-names"/>
+    <keyword type="function" name="SeedObjectInitializeCallback ()" link="seed-JS-Objects.html#SeedObjectInitializeCallback"/>
+    <keyword type="function" name="SeedObjectFinalizeCallback ()" link="seed-JS-Objects.html#SeedObjectFinalizeCallback"/>
+    <keyword type="function" name="SeedObjectHasPropertyCallback ()" link="seed-JS-Objects.html#SeedObjectHasPropertyCallback"/>
+    <keyword type="function" name="SeedObjectGetPropertyCallback ()" link="seed-JS-Objects.html#SeedObjectGetPropertyCallback"/>
+    <keyword type="function" name="SeedObjectSetPropertyCallback ()" link="seed-JS-Objects.html#SeedObjectSetPropertyCallback"/>
+    <keyword type="function" name="SeedObjectDeletePropertyCallback ()" link="seed-JS-Objects.html#SeedObjectDeletePropertyCallback"/>
+    <keyword type="function" name="SeedObjectGetPropertyNamesCallback ()" link="seed-JS-Objects.html#SeedObjectGetPropertyNamesCallback"/>
+    <keyword type="function" name="SeedObjectCallAsFunctionCallback ()" link="seed-JS-Objects.html#SeedObjectCallAsFunctionCallback"/>
+    <keyword type="function" name="SeedObjectHasInstanceCallback ()" link="seed-JS-Objects.html#SeedObjectHasInstanceCallback"/>
+    <keyword type="function" name="SeedObjectConvertToTypeCallback ()" link="seed-JS-Objects.html#SeedObjectConvertToTypeCallback"/>
+    <keyword type="function" name="SeedObjectCallAsConstructorCallback ()" link="seed-JS-Objects.html#SeedObjectCallAsConstructorCallback"/>
+    <keyword type="function" name="SeedFunctionCallback ()" link="seed-Native-Functions.html#SeedFunctionCallback"/>
+    <keyword type="function" name="seed_make_function ()" link="seed-Native-Functions.html#seed-make-function"/>
+    <keyword type="function" name="seed_create_function ()" link="seed-Native-Functions.html#seed-create-function"/>
+    <keyword type="enum" name="enum SeedPropertyAttributes" link="seed-JavaScript-Classes.html#SeedPropertyAttributes"/>
+    <keyword type="enum" name="enum SeedClassAttributes" link="seed-JavaScript-Classes.html#SeedClassAttributes"/>
+    <keyword type="typedef" name="SeedClass" link="seed-JavaScript-Classes.html#SeedClass"/>
+    <keyword type="macro" name="seed_empty_class" link="seed-JavaScript-Classes.html#seed-empty-class"/>
+    <keyword type="function" name="seed_create_class ()" link="seed-JavaScript-Classes.html#seed-create-class"/>
+    <keyword type="function" name="seed_make_constructor ()" link="seed-JavaScript-Classes.html#seed-make-constructor"/>
+    <keyword type="struct" name="struct SeedClosure" link="seed-SeedClosure.html#SeedClosure"/>
+    <keyword type="function" name="seed_closure_new ()" link="seed-SeedClosure.html#seed-closure-new"/>
+    <keyword type="function" name="seed_closure_get_callable ()" link="seed-SeedClosure.html#seed-closure-get-callable"/>
+    <keyword type="function" name="seed_closure_invoke ()" link="seed-SeedClosure.html#seed-closure-invoke"/>
+    <keyword type="function" name="seed_closure_invoke_with_context ()" link="seed-SeedClosure.html#seed-closure-invoke-with-context"/>
+    <keyword type="function" name="seed_closure_warn_exception ()" link="seed-SeedClosure.html#seed-closure-warn-exception"/>
+    <keyword type="macro" name="CHECK_ARG_COUNT()" link="seed-Modules.html#CHECK-ARG-COUNT:CAPS"/>
+    <keyword type="macro" name="DEFINE_ENUM_MEMBER()" link="seed-Modules.html#DEFINE-ENUM-MEMBER:CAPS"/>
+    <keyword type="macro" name="DEFINE_ENUM_MEMBER_EXT()" link="seed-Modules.html#DEFINE-ENUM-MEMBER-EXT:CAPS"/>
+    <keyword type="function" name="SeedModuleInitCallback ()" link="seed-Modules.html#SeedModuleInitCallback"/>
+    <keyword type="function" name="readline.readline (prompt)" link="readline-module.html#readline-readline"/>
+    <keyword type="function" name="readline.bind (key, function)" link="readline-module.html#readline-bind"/>
+    <keyword type="function" name="readline.done ()" link="readline-module.html#readline-done"/>
+    <keyword type="function" name="readline.buffer()" link="readline-module.html#readline-buffer"/>
+    <keyword type="function" name="readline.insert (string)" link="readline-module.html#readline-insert"/>
+    <keyword type="function" name="new sqlite.Database(filename)" link="sqlite-module.html#sqlite-database"/>
+    <keyword type="function" name="database.exec(command, callback)" link="sqlite-module.html#sqlite-exec"/>
+    <keyword type="function" name="database.close()" link="sqlite-module.html#sqlite-close"/>
+    <keyword type="function" name="builder.connect_signals (object, user_data)" link="GtkBuilder-module.html#gtkbuilder-connect-signals"/>
+    <keyword type="function" name="new sandbox.Context()" link="Sandbox-module.html#sandbox-context"/>
+    <keyword type="function" name="context.eval(source)" link="Sandbox-module.html#sandbox-eval"/>
+    <keyword type="function" name="context.add_globals()" link="Sandbox-module.html#sandbox-addglobals"/>
+    <keyword type="function" name="context.destroy()" link="Sandbox-module.html#sandbox-destroy"/>
+    <keyword type="function" name="context.global" link="Sandbox-module.html#sandbox-global"/>
+  </functions>
+</book>

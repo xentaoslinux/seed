@@ -1,0 +1,21 @@
+From 24c5968e2ae3bdc49811329fa722035dba76db01 Mon Sep 17 00:00:00 2001
+From: Seán de Búrca <leftmostcat@gmail.com>
+Date: Mon, 26 Aug 2013 21:16:45 +0000
+Subject: Fix autogen and configure
+
+https://bugzilla.gnome.org/show_bug.cgi?id=706833
+---
+diff --git a/configure.ac b/configure.ac
+index f741f24..ddcab40 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -4,6 +4,7 @@ AC_INIT(seed, 3.8.2)
+ AM_INIT_AUTOMAKE([1.7 -Wno-portability])
+ AM_MAINTAINER_MODE([enable])
+ AC_CONFIG_HEADERS([config.h])
++AC_CONFIG_MACRO_DIR([m4])
+ 
+ AC_CANONICAL_HOST
+ 
+--
+cgit v0.9.2

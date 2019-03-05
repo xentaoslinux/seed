@@ -1,0 +1,290 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>Seed Runtime Documentation</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" href="style.css" type="text/css" charset="utf-8" />
+	<script type="text/javascript" src="sh.js"></script>
+    <script type="text/javascript" src="sh_js.js"></script>
+    <link type="text/css" rel="stylesheet" href="sh.css" />
+</head>
+<body onload="sh_highlightDocument();">
+<div id="header">Seed Runtime</div>
+<div id="subheader">v.@VERSION@</div>
+<div class="section"><b>imports</b></div>
+<p>
+An <b>imports</b> object is defined globally in every Seed context. This provides access to GObject Introspection namespaces, C extension modules, and other JavaScript files, as explained in the next three sections.
+</p>
+<p>
+The default path to search for native modules and JavaScript files to be imported can be set as an array of strings on <b>imports.searchPath</b>:
+</p>
+<pre class="sh_javascript">
+imports.searchPath.push("/opt/javascript");
+</pre>
+<p>
+This will add /opt/javascript as the last location to search when looking for native Seed modules and JavaScript files. The default search path includes the current directory and the directory into which Seed's default native modules are installed.
+</p>
+<div class="section"><b>imports.gi</b></div>
+<p>
+Provides access to all installed gobject-introspection <i>namespaces</i>. <b>imports.gi.<i>namespace</i></b> will import functions and constructors from the given namespace and return an object providing them.
+</p>
+<p>
+Importing is done once per process, and any subsequent accesses to the same namespace return the <i>same</i> object, and are very cheap as a result.
+</p>
+<pre class="sh_javascript">
+Gtk = imports.gi.Gtk;
+Gtk.init(null, null);
+</pre>
+<p>A particular version of a namespace can be loaded by setting <i>before</i> it is first requested, by setting the <b>imports.gi.versions.<i>namespace</i></b> object to a string representing the version number to load:
+</p>
+<pre class="sh_javascript">
+imports.gi.versions.Clutter = "0.8";
+Clutter = imports.gi.Clutter; // The returned object represents clutter-0.8
+</pre>
+<div class="section"><b>Importing modules and JavaScript files</b></div>
+<p>
+Native C modules and JavaScript files can be imported in a similar fashion, by accessing <b>imports.<i>file</i></b>. Notice that the suffix (most likely .so or .js, respectively) is not included in the file name when requesting it, and keep this in mind when naming files.
+</p>
+<p>
+First, if the file name is actually a <i>directory</i>, an object is returned that represents the contents of that directory, which behaves exactly as <i>imports</i> does in regards to importing native modules and JavaScript files. For example, say you have the directory <i>js</i>, which contains <i>score.js</i>:
+</p>
+<pre class="sh_javascript">
+score = imports.js.score;
+</pre>
+<p>This will import score.js, just as described below.</p>
+<p>
+If the file is <i>not</i> a directory, but happens to have your system's shared library suffix, the native module is loaded, and the module object is returned, similar to GObject Introspection namespace imports:
+</p>
+<pre class="sh_javascript">
+readline = imports.readline;
+readline.readline(">");
+</pre>
+<p>
+Otherwise, Seed assumes that the file is a JavaScript file. If the file is found in the current path, it is evaluated (in a <b>separate</b> Seed context, so any state in the file it is imported from is not accessible), and the global object is returned. Keep in mind that it is possible to accidentally import a non-JavaScript file, as the extension is not taken into account.
+</p>
+<p>Imagine we have the file test_file.js:</p>
+<pre class="sh_javascript">
+test_string = "Hello, world!";
+</pre>
+<p>And another file, which we evaluate with <i>seed</i>:</p>
+<pre class="sh_javascript">
+test_file = imports.test_file;
+print(test_file.test_string);
+</pre>
+<p>This will print "Hello, world!", as expected. Notice how, unlike in versions of Seed prior to 0.5, the file is not actually evaluated in the context of the importing file, so its toplevel objects are not globally available.</p>
+<div class="section"><b>print</b>(value)</div>
+<p>
+Prints, to standard output, a representation of <i>value</i>. Number types are printed as floating-point values (with 6 decimal places); strings are printed as-is; objects are printed as <code>[object <i>type</i>]</code>.
+</p>
+<pre class="sh_javascript">
+print(5);
+print("This is a test!".replace(" is ", " was "));
+
+var win = new Gtk.Window();
+print(win);
+</pre>
+<div class="section"><b>printf</b>(format, ...)</div>
+<div class="section"><b>Seed.sprintf</b>(format, ...)</div>
+<p>
+<code>printf</code> prints, to standard output, a string formatted as specified by <i>format</i>. Following <i>format</i> should be values to substitute, as in C's <code>printf</code>. Most standard printf format strings should work.
+</p>
+<p>
+<code>sprintf</code> returns the string, instead of printing it.
+</p>
+<pre class="sh_javascript">
+printf("A number: %d\n", 5);
+printf("One third is approximately %.3f\n", 1/3);
+printf("%d %s %d\n", 2, " is not ", 5);
+
+var my_string = Seed.sprintf("%d + %d = %d", 2, 3, 2+3);
+var my_name = printf("[%s] is %d characters long!\n",
+                          my_string, my_string.length);
+</pre>
+<div class="section"><b>Seed.check_syntax</b>(code)</div>
+<p>
+Examines a segment of Javascript, looking for syntax errors. If errors are found, an exception is thrown, which can be caught with a try/catch block. You can examine the location of the syntax error with the <i>line</i> property of the returned exception.
+</p>
+<pre class="sh_javascript">
+try{
+    Seed.check_syntax("234[asdf");
+}
+catch(e){
+    print("Something horrible happened on line " + e.line);
+}
+</pre>
+<div class="section"><b>Seed.stringify</b>(object)</div>
+<p>
+Returns a string representing the entire contents of <i>object</i> in a pretty-printed fashion, like that of JSON.
+</p>
+<pre class="sh_javascript">
+proto = Seed.prototype(Gtk.Window);
+method = Seed.introspect(proto.translate_coordinates);
+print(Seed.stringify(method));
+</pre>
+<div class="section"><b>Seed.argv</b></div>
+<p>
+An array representing the arguments passed to the <code>seed</code> interpreter.
+</p>
+<div class="section"><b>Seed.quit</b>(<i>exitcode</i>)</div>
+<p>
+Terminates the execution of the Seed interpreter, returning <i>exitcode</i> as the exit value of the program.
+</p>
+<div class="section">object.<b>signal.<i>signame</i>.connect</b>(function<i>, user_data</i>)<br/>
+object.<b>connect</b>(signame, function, <i>user_data</i>)</div>
+<p>
+Connects <i>function</i> to the signal, <i>signame</i>, on <i>object</i>. Any GObject signal will work. If present, user_data is passed as the last argument to the callback.
+</p>
+<pre class="sh_javascript">
+function button_clicked(){
+    print("You pushed me!!");
+}
+
+var button = new Gtk.Button();
+button.signal.clicked.connect(button_clicked);
+</pre>
+<p>
+The second form is useful if you want to connect to detailed signals; for example, <b>notify::</b> signals on an object's properties:
+</p>
+<pre class="sh_javascript">
+function handle_opacity_change(obj, gobject, user_data){
+    print("Window " + obj + "'s opacity was changed!");
+}
+
+win = new Gtk.Window();
+win.signal.connect("notify::opacity", handle_opacity_change);
+</pre>
+<div class="section"><b>Exceptions</b></div>
+<p>
+Seed throws Javascript exceptions for errors in the GObject layer; our custom exception types are as follows:</p>
+<ul>
+<li><b>InvalidPropertyValue</b> - a property was set to a value out of range</li>
+<li><b>PropertyError</b> - a warning occurred in GLib while trying to set a property</li>
+<li><b>ArgumentError</b> - a function was called with the wrong number of arguments</li>
+<li><b>ConversionError</b> - one of the type conversion functions threw an exception </li>
+<li><b>TypeError</b> - a required argument was of the wrong type </li>
+<li><b>SyntaxError</b> - a syntax error was thrown from JavaScriptCore</li>
+<li><b>ParseError</b> - a parsing error was thrown from JavaScriptCore (make sure you close all of your brackets!)</li>
+</ul>
+<p>Exceptions are caught with the <code>try/catch</code> construct:</p>
+<pre class="sh_javascript">
+try{
+    var window = new Gtk.Window();
+    window.opacity = "hello!";
+}
+catch(e){
+    print("An exception occurred!");
+}
+</pre>
+<p>
+<code>e</code> is the name we've given the Exception object in this examle. The Exception object has a handful of properties which provide more information about the exception:</p>
+<ul>
+<li><b>name</b> - the exception type</li>
+<li><b>message</b> - the detailed message describing the exception</li>
+<li><b>line</b> - the line on which the exception took place</li>
+<li><b>sourceURL</b> - the source file, if any, in which the exception took place</li>
+</ul>
+<p>
+Just as in Javascript, you can throw an exception manually with the <b>throw</b> function, passing it an object - either a new object, with the properties listed above (for consistency), or an arbitrary object:
+</p>
+<pre class="sh_javascript">
+try{
+    if(!http.connect("http://google.com"))
+        throw { name: "HTTPConnectionError", message: "404 File Not Found" }
+}
+catch(e){
+    // e.message = "404 File Not Found"
+}
+</pre>
+<div class="section"><b>Inheritance</b></div>
+<p>
+JavaScript, being a prototypal language, rather than a class based language, has no strict inheritance model. A plethora of documentation can be found on the internet for implementing various inheritance models inside your program. However, a clear and common use case is to subclass GObjects, and Seed provides an interface to define and implement new GTypes.
+</p>
+<p><b>Type Objects</b></p>
+<p>
+To implement a new GType, an object describing the type is required.
+</p>
+<pre class="sh_javascript">
+NewType = {
+    parent: ParentTypeConstructor,
+    name: "NewTypeName",
+    class_init: function(klass, prototype){
+    },
+    instance_init: function(){
+    }
+}
+</pre>
+<p>
+Indicates that the new type derives from ParentType, i.e. Gtk.Window, with name "NewTypeName". The class_init function is called when the class comes in to existence, and allows you to add to the prototype of objects constructed by the type. The instance_init function is called on the creation of each instance, with the "this" variable set to the new instance. An example type:
+</p>
+<pre class="sh_javascript">
+HelloLabel = new GType({
+    parent: Gtk.Label,
+    name: "HelloLabel",
+    class_init: function(klass, prototype){
+        prototype.say_goodbye = 
+                             function(){
+                                 this.label = "Goodbye";
+                             }
+    },
+    instance_init: function(){
+        this.label = "Hello"; // Hello Labels Always Say Hello.
+    }
+});
+</pre>
+<p> Now to create an instance of the object:</p>
+<pre class="sh_javascript">
+label = new HelloLabel();
+box.pack_start(label);
+label.show();
+label.say_goodbye();
+</pre>
+<p>
+The label inherits all the methods, signals, and properties of the Gtk.Label class and its parents, and internally has its own GType.
+</p>
+<div class="section">signal.<b>emit</b>(<i>...</i>)</div>
+<p>
+<b>emit</b> provides the ability to arbitrarily emit any GObject signal, thus calling all of the functions which are connected to it. Any arguments passed to <b>emit</b> are passed on to the callback function.
+</p>
+<pre class="sh_javascript">
+win = new Gtk.Window();
+win.signal.close.connect(Gtk.main_quit);
+win.signal.close.emit();
+</pre>
+<div class="section">class.<b>install_signal</b>(signal_descriptor)</div>
+<p>
+When creating a new GObject type within Seed, <b>install_signal</b> provides the ability to install new signals, which you can later emit with <b>emit</b> and can be connected to in any of the usual ways.
+</p>
+<p>
+<i>signal_descriptor</i> is a Javascript object describing the signal. Important properties of <i>signal_descriptor</i> are:
+</p>
+<ul>
+<li><i>name</i> &mdash; the name of the signal</li>
+<li><i>parameters</i> &mdash; the types of any arguments the signal takes, as a Javascript array <i>(optional)</i></li>
+<li><i>return_type</i> &mdash; the expected return type of the signal handler <i>(optional)</i></li>
+</ul>
+<p>
+For example: 
+</p>
+<pre class="sh_javascript">
+HelloWindow = new GType({       
+    parent: Gtk.Window.type,
+    name: "HelloWindow",
+    signals: [{name: "hello",
+               parameters: [GObject.TYPE_INT,
+                            GObject.TYPE_STRING],
+               return_type: Gtk.Window.type}];
+});
+
+w = new HelloWindow();
+
+w.signal.hello.connect(function(object, number, string){
+                           print(number + " " + string);
+                           return new Gtk.Window()
+                       });
+
+print(w.signal.hello.emit(2, "Test"));
+
+</pre>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<refentry id="seed-contact" revision="05 Jul 2009">
+<refmeta>
+<refentrytitle>Contact Information</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>SEED Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>Contact Information</refname>
+<refpurpose>
+Where to find help, ask questions, or bring patches
+</refpurpose>
+</refnamediv>
+  
+    <refsect1 id="build">
+      <title>Authors</title>
+      <itemizedlist>
+        <listitem>Robert Carr &lt;<ulink url="mailto:racarr@svn.gnome.org">racarr@svn.gnome.org</ulink>&gt;</listitem>
+        <listitem>Tim Horton &lt;<ulink url="mailto:hortont@svn.gnome.org">hortont@svn.gnome.org</ulink>&gt;</listitem>
+    </itemizedlist>
+    </refsect1>
+    
+    <refsect1 id="git">
+      <title>Source Repository</title>
+      <para>The Seed source code is kept in the GNOME-wide version control at <ulink url="http://git.gnome.org/cgit/seed">git.gnome.org</ulink>. You can check out the code on your own machine if you have <command>git</command> installed:</para>
+      <para><command>git clone git://git.gnome.org/seed</command></para>
+    </refsect1>
+
+    <refsect1 id="bugs">
+      <title>Bugs</title>
+      <para>Bugs and feature requests can be reported on the <ulink url="http://bugzilla.gnome.org/enter_bug.cgi?product=seed">seed</ulink> product in GNOME Bugzilla.</para>
+    </refsect1>
+
+</refentry>

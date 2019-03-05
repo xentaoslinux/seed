@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Working with Contexts</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="Seed Reference Manual">
+<link rel="up" href="api.html" title="Part III. Seed API Reference">
+<link rel="prev" href="seed-Initialization.html" title="Initialization">
+<link rel="next" href="seed-Evaluation.html" title="Evaluating JavaScript">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="seed-Initialization.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="api.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Seed Reference Manual</th>
+<td><a accesskey="n" href="seed-Evaluation.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#seed-Contexts.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#seed-Contexts.description" class="shortcut">Description</a>
+</td></tr>
+</table>
+<div class="refentry">
+<a name="seed-Contexts"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="seed-Contexts.top_of_page"></a>Working with Contexts</span></h2>
+<p>Working with Contexts — Self-contained JavaScript execution environments</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="seed-Contexts.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+#include &lt;seed/seed.h&gt;
+
+typedef             <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext">SeedContext</a>;
+typedef             <a class="link" href="seed-Contexts.html#SeedGlobalContext" title="SeedGlobalContext">SeedGlobalContext</a>;
+typedef             <a class="link" href="seed-Contexts.html#SeedContextGroup" title="SeedContextGroup">SeedContextGroup</a>;
+<a class="link" href="seed-Contexts.html#SeedGlobalContext" title="SeedGlobalContext"><span class="returnvalue">SeedGlobalContext</span></a>   <a class="link" href="seed-Contexts.html#seed-context-create" title="seed_context_create ()">seed_context_create</a>                 (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContextGroup" title="SeedContextGroup"><span class="type">SeedContextGroup</span></a> group</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JavaScript-Classes.html#SeedClass" title="SeedClass"><span class="type">SeedClass</span></a> global_class</code></em>);
+<a class="link" href="seed-Contexts.html#SeedGlobalContext" title="SeedGlobalContext"><span class="returnvalue">SeedGlobalContext</span></a>   <a class="link" href="seed-Contexts.html#seed-context-ref" title="seed_context_ref ()">seed_context_ref</a>                    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedGlobalContext" title="SeedGlobalContext"><span class="type">SeedGlobalContext</span></a> ctx</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="seed-Contexts.html#seed-context-unref" title="seed_context_unref ()">seed_context_unref</a>                  (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedGlobalContext" title="SeedGlobalContext"><span class="type">SeedGlobalContext</span></a> ctx</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="seed-Contexts.html#seed-context-collect" title="seed_context_collect ()">seed_context_collect</a>                (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedGlobalContext" title="SeedGlobalContext"><span class="type">SeedGlobalContext</span></a> ctx</code></em>);
+<a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="returnvalue">SeedObject</span></a>          <a class="link" href="seed-Contexts.html#seed-context-get-global-object" title="seed_context_get_global_object ()">seed_context_get_global_object</a>      (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="seed-Contexts.html#seed-prepare-global-context" title="seed_prepare_global_context ()">seed_prepare_global_context</a>         (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="seed-Contexts.html#seed-importer-add-global" title="seed_importer_add_global ()">seed_importer_add_global</a>            (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><span class="type">gchar</span> *name</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="seed-Contexts.html#seed-importer-set-search-path" title="seed_importer_set_search_path ()">seed_importer_set_search_path</a>       (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><span class="type">gchar</span> **search_path</code></em>);
+</pre>
+</div>
+<div class="refsect1">
+<a name="seed-Contexts.description"></a><h2>Description</h2>
+<p>
+A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> provides a complete "universe" for the execution of JavaScript. You can use <a class="link" href="seed-Contexts.html#seed-context-create" title="seed_context_create ()"><code class="function">seed_context_create()</code></a> to create a sandboxed context that lacks the import system, so it can be used to execute somewhat untrusted JavaScript (as it has no way to access the rest of your system). You can also expose the default set of globals (including "print", "imports", and "Seed") to create more powerful but still self-contained environments within which to execute code.
+</p>
+<div class="example">
+<a name="idp6331760"></a><p class="title"><b>Example 6. Using a Seed context as a form of sandboxing</b></p>
+<div class="example-contents"><pre class="programlisting">
+...
+ctx = seed_context_create(NULL, NULL);
+script = seed_make_script(ctx, "print(imports)", NULL, 0);
+// nothing is printed, because imports is undefined, because we're in a sandbox
+...
+</pre></div>
+</div>
+<br class="example-break"><p>The sandbox module provides access to this system from the JavaScript side of Seed.
+</p>
+</div>
+<div class="refsect1">
+<a name="seed-Contexts.details"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="SeedContext"></a><h3>SeedContext</h3>
+<pre class="programlisting">typedef gpointer SeedContext;
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="SeedGlobalContext"></a><h3>SeedGlobalContext</h3>
+<pre class="programlisting">typedef gpointer SeedGlobalContext;
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="SeedContextGroup"></a><h3>SeedContextGroup</h3>
+<pre class="programlisting">typedef gpointer SeedContextGroup;
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-context-create"></a><h3>seed_context_create ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Contexts.html#SeedGlobalContext" title="SeedGlobalContext"><span class="returnvalue">SeedGlobalContext</span></a>   seed_context_create                 (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContextGroup" title="SeedContextGroup"><span class="type">SeedContextGroup</span></a> group</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JavaScript-Classes.html#SeedClass" title="SeedClass"><span class="type">SeedClass</span></a> global_class</code></em>);</pre>
+<p>
+Create a new <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>. By default, this creates a new context
+which has no global objects; you can add the default set using
+<a class="link" href="seed-Contexts.html#seed-prepare-global-context" title="seed_prepare_global_context ()"><code class="function">seed_prepare_global_context()</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>group</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContextGroup" title="SeedContextGroup"><span class="type">SeedContextGroup</span></a> in which to create the new context, or <code class="literal">NULL</code> to
+create it in the default context group.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>global_class</code></em> :</span></p></td>
+<td>The <a class="link" href="seed-JavaScript-Classes.html#SeedClass" title="SeedClass"><span class="type">SeedClass</span></a> to use to create the global object, or <code class="literal">NULL</code> to
+create it with the default class.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A new <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-context-ref"></a><h3>seed_context_ref ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Contexts.html#SeedGlobalContext" title="SeedGlobalContext"><span class="returnvalue">SeedGlobalContext</span></a>   seed_context_ref                    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedGlobalContext" title="SeedGlobalContext"><span class="type">SeedGlobalContext</span></a> ctx</code></em>);</pre>
+<p>
+Increments the reference count of <em class="parameter"><code>ctx</code></em>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td><em class="parameter"><code>ctx</code></em></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-context-unref"></a><h3>seed_context_unref ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                seed_context_unref                  (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedGlobalContext" title="SeedGlobalContext"><span class="type">SeedGlobalContext</span></a> ctx</code></em>);</pre>
+<p>
+Decrements the reference count of <em class="parameter"><code>ctx</code></em>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-context-collect"></a><h3>seed_context_collect ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                seed_context_collect                (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedGlobalContext" title="SeedGlobalContext"><span class="type">SeedGlobalContext</span></a> ctx</code></em>);</pre>
+<p>
+Instructs JavaScriptCore to make a garbage collection pass.
+The context parameter is currently unused, and a pass is made
+through all contexts.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-context-get-global-object"></a><h3>seed_context_get_global_object ()</h3>
+<pre class="programlisting"><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="returnvalue">SeedObject</span></a>          seed_context_get_global_object      (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A valid <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>The global object for <em class="parameter"><code>ctx</code></em>.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-prepare-global-context"></a><h3>seed_prepare_global_context ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                seed_prepare_global_context         (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>);</pre>
+<p>
+Adds the default set of global objects (imports, GType, Seed, and print)
+to a fresh <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> on which to add the default set of global objects.</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-importer-add-global"></a><h3>seed_importer_add_global ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                seed_importer_add_global            (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><span class="type">gchar</span> *name</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-importer-set-search-path"></a><h3>seed_importer_set_search_path ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                seed_importer_set_search_path       (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><span class="type">gchar</span> **search_path</code></em>);</pre>
+<p>
+</p>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.18</div>
+</body>
+</html>

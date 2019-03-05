@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Evaluating JavaScript</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="Seed Reference Manual">
+<link rel="up" href="api.html" title="Part III. Seed API Reference">
+<link rel="prev" href="seed-Contexts.html" title="Working with Contexts">
+<link rel="next" href="seed-Exceptions.html" title="Exception Handling">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="seed-Contexts.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="api.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Seed Reference Manual</th>
+<td><a accesskey="n" href="seed-Exceptions.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#seed-Evaluation.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#seed-Evaluation.description" class="shortcut">Description</a>
+</td></tr>
+</table>
+<div class="refentry">
+<a name="seed-Evaluation"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="seed-Evaluation.top_of_page"></a>Evaluating JavaScript</span></h2>
+<p>Evaluating JavaScript — Creating and interpreting scripts</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="seed-Evaluation.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+#include &lt;seed/seed.h&gt;
+
+                    <a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript">SeedScript</a>;
+<a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript"><span class="returnvalue">SeedScript</span></a> *        <a class="link" href="seed-Evaluation.html#seed-make-script" title="seed_make_script ()">seed_make_script</a>                    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">gchar</span> *js</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">gchar</span> *source_url</code></em>,
+                                                         <em class="parameter"><code><span class="type">gint</span> line_number</code></em>);
+<a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           <a class="link" href="seed-Evaluation.html#seed-evaluate" title="seed_evaluate ()">seed_evaluate</a>                       (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript"><span class="type">SeedScript</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> this_object</code></em>);
+<a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           <a class="link" href="seed-Evaluation.html#seed-simple-evaluate" title="seed_simple_evaluate ()">seed_simple_evaluate</a>                (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><span class="type">gchar</span> *source</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);
+<a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript"><span class="returnvalue">SeedScript</span></a> *        <a class="link" href="seed-Evaluation.html#seed-script-new-from-file" title="seed_script_new_from_file ()">seed_script_new_from_file</a>           (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><span class="type">gchar</span> *file</code></em>);
+<a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="returnvalue">SeedException</span></a>       <a class="link" href="seed-Evaluation.html#seed-script-exception" title="seed_script_exception ()">seed_script_exception</a>               (<em class="parameter"><code><a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript"><span class="type">SeedScript</span></a> *s</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="seed-Evaluation.html#seed-script-destroy" title="seed_script_destroy ()">seed_script_destroy</a>                 (<em class="parameter"><code><a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript"><span class="type">SeedScript</span></a> *s</code></em>);
+</pre>
+</div>
+<div class="refsect1">
+<a name="seed-Evaluation.description"></a><h2>Description</h2>
+<p>
+Seed relies on WebKit's JavaScriptCore interpreter to actually evaluate snippets of JavaScript; however, it provides a handful of useful wrapper functions to quickly create and evaluate scripts. <a class="link" href="seed-Evaluation.html#seed-make-script" title="seed_make_script ()"><code class="function">seed_make_script()</code></a> and <a class="link" href="seed-Evaluation.html#seed-evaluate" title="seed_evaluate ()"><code class="function">seed_evaluate()</code></a> are the workhorse functions; these allow you to control every detail of the created script and its evaluation environment (including customizing the "this" object during evaluation, and setting a starting line number and filename from which the script originates). <a class="link" href="seed-Evaluation.html#seed-simple-evaluate" title="seed_simple_evaluate ()"><code class="function">seed_simple_evaluate()</code></a> provides an interface to execute a string of JavaScript without previously creating a <a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript"><span class="type">SeedScript</span></a>, and, while requiring less supporting code, is less flexible.
+</p>
+<div class="example">
+<a name="idp8392992"></a><p class="title"><b>Example 7. Create and evaluate a string of JavaScript with <a class="link" href="seed-Evaluation.html#seed-make-script" title="seed_make_script ()"><code class="function">seed_make_script()</code></a></b></p>
+<div class="example-contents"><pre class="programlisting">
+SeedEngine * eng;
+ 
+...
+ 
+SeedScript * script;
+/* Create a simple <a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript">SeedScript</a> */
+script = seed_make_script(eng-&gt;context, "print('Hello, world!')", NULL, 0);
+ 
+/* Evaluate the <a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript">SeedScript</a> in the default context */
+seed_evaluate(eng-&gt;context, script, 0);
+ 
+...
+</pre></div>
+</div>
+<br class="example-break"><div class="example">
+<a name="idp8397072"></a><p class="title"><b>Example 8. Create and evaluate a string of JavaScript with <a class="link" href="seed-Evaluation.html#seed-simple-evaluate" title="seed_simple_evaluate ()"><code class="function">seed_simple_evaluate()</code></a></b></p>
+<div class="example-contents"><pre class="programlisting">
+SeedEngine * eng;
+ 
+...
+ 
+/* Evaluate a simple JavaScript snippet in the default context */
+seed_simple_evaluate(eng-&gt;context, "print('Hello, world!')", NULL);
+ 
+...
+</pre></div>
+</div>
+<br class="example-break">
+</div>
+<div class="refsect1">
+<a name="seed-Evaluation.details"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="SeedScript"></a><h3>SeedScript</h3>
+<pre class="programlisting">typedef struct {
+  JSStringRef script;
+  JSValueRef exception;
+
+  JSStringRef source_url;
+  gint line_number;
+} SeedScript;
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-make-script"></a><h3>seed_make_script ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript"><span class="returnvalue">SeedScript</span></a> *        seed_make_script                    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">gchar</span> *js</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">gchar</span> *source_url</code></em>,
+                                                         <em class="parameter"><code><span class="type">gint</span> line_number</code></em>);</pre>
+<p>
+Creates a new <a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript"><span class="type">SeedScript</span></a> instance with <em class="parameter"><code>js</code></em> as the contents, then
+checks for proper syntax.
+</p>
+<p>
+Note: <a class="link" href="seed-Evaluation.html#seed-make-script" title="seed_make_script ()"><code class="function">seed_make_script()</code></a> does not handle the shebang line, and will return a
+      parse error if one is included in <em class="parameter"><code>js</code></em>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>js</code></em> :</span></p></td>
+<td>A string representing the contents of the script.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>source_url</code></em> :</span></p></td>
+<td>The filename of the script, for reference in errors, or <code class="literal">NULL</code>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>line_number</code></em> :</span></p></td>
+<td>The line number of the beginning of the script, for reference
+in error messages, or <code class="literal">NULL</code>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>The newly created <a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript"><span class="type">SeedScript</span></a>.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-evaluate"></a><h3>seed_evaluate ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           seed_evaluate                       (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript"><span class="type">SeedScript</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> this_object</code></em>);</pre>
+<p>
+Evaluates a <a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript"><span class="type">SeedScript</span></a> with <em class="parameter"><code>this</code></em> as the global "this" object.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript"><span class="type">SeedScript</span></a> to evaluate.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>The <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> returned by evaluating the script.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-simple-evaluate"></a><h3>seed_simple_evaluate ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           seed_simple_evaluate                (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><span class="type">gchar</span> *source</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);</pre>
+<p>
+Evaluates a string of JavaScript in <em class="parameter"><code>ctx</code></em>; if an exception
+is raised in the context of the script, it will be placed in <em class="parameter"><code>exception</code></em>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>source</code></em> :</span></p></td>
+<td>A string representing the JavaScript to evaluate.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>exception</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> pointer to store an exception in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>The <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> returned by evaluating the script.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-script-new-from-file"></a><h3>seed_script_new_from_file ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript"><span class="returnvalue">SeedScript</span></a> *        seed_script_new_from_file           (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><span class="type">gchar</span> *file</code></em>);</pre>
+<p>
+Uses <a class="link" href="seed-Evaluation.html#seed-make-script" title="seed_make_script ()"><code class="function">seed_make_script()</code></a> to create a <a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript"><span class="type">SeedScript</span></a> from the contents of <em class="parameter"><code>file</code></em>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>file</code></em> :</span></p></td>
+<td>The filename of the script to load.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>The newly created <a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript"><span class="type">SeedScript</span></a>.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-script-exception"></a><h3>seed_script_exception ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="returnvalue">SeedException</span></a>       seed_script_exception               (<em class="parameter"><code><a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript"><span class="type">SeedScript</span></a> *s</code></em>);</pre>
+<p>
+Retrieves the exception (if any) raised during the evaluation of <em class="parameter"><code>s</code></em>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript"><span class="type">SeedScript</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A <a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> representing the exception of <em class="parameter"><code>s</code></em>.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-script-destroy"></a><h3>seed_script_destroy ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                seed_script_destroy                 (<em class="parameter"><code><a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript"><span class="type">SeedScript</span></a> *s</code></em>);</pre>
+<p>
+</p>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.18</div>
+</body>
+</html>

@@ -1,0 +1,454 @@
+== Seed 3.8.0 (2013.04.16) ==
+
+* See ChangeLog for detailed list of changes
+
+== Seed 3.1.1 (2011.05.17) ==
+
+* Add preliminary support for FreeBSD and OpenBSD, at least
+
+* Fix DBus module build problems
+
+* Fix typo in documentation
+
+* Fix build-time errors with recent dash as sh
+
+* Update Seed to follow recent gobject-introspection changes
+
+== Seed 3.0.0, "Evacuate the Dancefloor" (2011.04.01) ==
+
+* Allow the creation of constrained SeedEngine contexts
+
+* Expose seed_value_(to|from)_gi_argument and seed_value_to_gvalue as public API
+
+* Make seed.h C++ friendly
+
+* Take GTK+ version into account in the prefix path
+
+== Seed 2.91.90 (2011.02.22) ==
+
+* Fix build with GTK+3
+
+* Change soname for GTK+3 version
+
+== Seed 2.31.91, "Write About Love" (2010.08.30) ==
+
+* Seed now optionally supports both WebKitGtk+-1.0 and 3.0
+
+* Dynamic Object module - provides support for implementing
+  underlying object callbacks in JavaScript (see commit d31aca)
+
+* Implement caller-allocated out arguments
+
+* Expose seed_value_from_gvalue() through the API
+
+* Fix unusable seed_object_copy_property_names()
+
+* Fix various build system issues
+
+== Seed 2.31.5, "Elephant" (2010.07.11) ==
+
+* Seed now requires WebKitGtk+-3.0, built against Gtk+-3.0
+
+* Support for passing GObjects as userdata
+
+* Support for redirection of Seed.print via set_print_handler
+
+* Support __script_path__ within Seed sandboxes
+
+* Fixes to importer to not expose toString/valueOf files
+
+* Additional warnings in various potential error cases
+
+== Seed 2.31.1, "The Black Album" (2010.03.29) ==
+
+* Support for returning arrays of GTypes
+
+* Support for GError types in various places
+
+* Rework out arguments - old style still works, also returns
+  dictionary with keys named after parameters
+
+* Support initialization using an existing JSGlobalContext
+
+== Seed 2.30.0, "Piano Man" (2010.03.29) ==
+
+* Second stable release!
+
+== Seed 2.29.91, "Greatest Hits" (2010.02.23) ==
+
+* Support void * arguments
+
+* Support connecting to notify:: signals everywhere
+
+== Seed 2.29.90, "Fort Nightly" (2010.02.08) ==
+
+* To avoid potential filename collisions, the imports system now supports:
+  imports['somedir/somefile.js'] (Alan Knowles)
+
+* Fix crash involving gtk_tree_model_get_value (Alan Knowles)
+
+* Fix subtle crash in DBus bindings (Rob Taylor)
+
+== Seed 2.29.5.3, "Twist and Shout" (2010.01.11) ==
+
+* Pass null structs through as "null" instead of empty seed_structs
+
+* Revert one of the 64-bit type safety commits from 2.29.5.2 until someone
+  can take a closer look at it; it broke enum typing on Linux
+
+* Fix potential segfault in various modules (missing null sentinels)
+
+== Seed 2.29.5.2, "Third Stage" (2010.01.07) ==
+
+* Move tests to automake-style 'make check', away from the previous,
+  Python-based 'make test' tool; all tests are now assertion-based, instead of
+  the previous output-based style
+
+* Fix various segfaults on Mac OS X (and possibly *BSD) related to 64-bit type
+  safety problems
+
+* Fix functionality of out arguments
+
+* Interpreter now returns non-zero status code if it exits with an exception
+
+== Seed 2.29.5.1, "Achtung Baby" (2010.01.01) ==
+
+* Fix "duplicate symbol" errors on non-Linux platforms
+
+== Seed 2.29.5, "Icky Thump" (2009.01.01) ==
+
+* Fix build on non-GNU platforms (primarily Mac OS X)
+
+* Distribute the REPL snippet with Seed again; the built-in REPL will work now
+
+* Fix segfault when accidentally protecting already-garbage-collected values
+
+* Fix segfault when accidentally unreffing nonexistant GIBaseInfos
+
+== Seed 2.29.4, "( )" (2009.12.17) ==
+
+* Improve type conversion portability; add seed_value_(to|from)_(s)size
+  functions.
+
+* Small random cleanup of unused arguments.
+
+== Seed 2.29.3 (2009.11.30) ==
+
+No changes.
+
+== Seed 2.29.2, "Never Mind the Bollocks" (2009.11.16) ==
+
+* Change semantics of seed_value_from_string and _from_filename; they 
+  now return JavaScript null if passed a null input value.
+
+* Seed interpreter adds --version argument
+
+* libseed adds --seed-version argument
+
+* Clutter extension wrapper for animate_with_alpha
+
+== Seed 2.28.0, "The Rise and Fall of Ziggy Stardust and the Spiders
+   from Mars" (2009.09.21) ==
+
+* First official stable release!
+
+== Seed 2.27.92, "Metal Machine Music" (2009.09.07) ==
+
+* Fix a bug in module building; modules are now versionless
+
+* The instanceof operator now works for GTypes
+
+* Add global support for G_TYPE_STRV
+
+== Seed 2.27.91, "Yellow Submarine" (2009.08.21) ==
+
+* Added seed_context_collect, to provide an interface for forcing
+  garbage collection manually
+
+== Seed 2.27.90, "London Calling" (2009.08.10) ==
+
+* Expanded and updated documentation; also available at:
+  	   http://library.gnome.org/devel/seed/unstable/
+
+* All JavaScript contexts now have a __script_path__ property, which
+  exposes the absolute, canonical path to the evaluated script
+
+* Add __init__.js functionality; if an imported folder contains __init__.js,
+  it will be evaluated with the imported context as the 'this' object
+
+* Fix bug which caused inheritance from a GType created in Seed to fail
+
+* Add "pretty" property installation, see:
+      	   tests/javascript/gtypes/gtype-property-nice.js
+
+* New FFI module, provides an interface for calling non-introspected
+  native C functions from JavaScript
+
+== Seed 0.8.5, "Self Portrait" (2009.07.10) ==
+
+* Significant reorganization and expansion of the reference documentation
+
+* New native modules:
+	* gettext
+	* MPFR (partially complete)
+
+* Same Seed has moved to the gsoc-seed-games branch of Gnome Games
+  (and will eventually move to master)
+
+* Add seed-module.h, which includes a handful of macros to make writing modules
+  slightly more attractive. Look at gettext or the reference docs for examples.
+
+* Prefix native modules with seed_ (libseed_readline.so, etc.); this fixes the
+  need to incessantly 'make clean' seed and cuts down on ambiguity in naming.
+
+* Add 'seed_value_is_string', 'seed_value_is_number', and
+  'seed_value_is_object_of_class' to libseed
+
+* Update examples to latest (now frozen) Clutter API changes.
+
+* Fixes a bug with the importer search path which resulted in the search path
+  being overwritten each time something was imported
+ 
+* The importer now also searches the directory in which the script being
+  executed is located by default.
+
+== Seed 0.8, "Bringing It All Back Home" (2009.05.27) ==
+
+* Importer now supports constructing directory objects, to avoid manipulation
+  of search path. Importer directory objects now support property enumeration.
+
+* Fix small leak in GObject wrapper initialization. (and also simplify
+  the process).
+
+* GtkBuilder module to handle GtkBuilder automatic signal connection.
+
+* *_init methods now take normal arrays (by value) in addition to the special
+  Seed.argv array.
+
+* GObject constructors (init methods) now take "self" as a parameter.
+
+* Passing non gobject-properties to a GObject constructor will set the
+  properties on the GObject wrapper.
+  
+* Module documentation rewritten in docbook, and builds one nice manual.
+
+* New Cairo module, supports most of the cairo API, with automatic memory
+  management and everything you would expect.
+
+* Fix a reference count leak introduced in the last few releases.
+  in some cases with non INITIALLY_UNOWNED objects.
+
+* Some work on ClutterPad examples, and writing examples which live inside of it
+  (lots of fun to play with!, cairo example...fun spring example...ClutterBox2D)
+
+* Working around a WebKit bug (which is actually fixed in SVN now), should
+  prevent a crash that happened sometimes with C modules.
+
+* Clutter animatev wrapper looks up property type wrapper now, so as to avoid
+  having to pass [GObject.TYPE_FOO, bar]
+
+* Implement some varargs functions which can be implemented on top of non-vararg
+  variants in JavaScript extensions.
+
+* JSON stuff (stringify,parse) is now in gnome-js-common.
+
+* Add seed_value_to_format to API, for converting an Array of SeedValue based
+  on a format string.
+  
+* Install seed-debug.h so modules can make use of it.
+
+* Search path now works in nonstandard prefix, default search path includes
+  gnome-js-common moduledir (from pkgconfig).
+  
+* Support to/from Date objects to time_t.
+
+== Seed 0.7, "Another Side of Bob Dylan" (2009.05.13) ==
+
+* Support for library init methods.
+
+* The REPL now supports multi-line entry.
+
+* Signal disconnection.
+
+* Significant Gtk-Doc reorganization.
+
+* New C modules:
+	* sandbox - provides sandboxed JavaScriptCore contexts.
+	* DBus - Client side DBus bindings.
+	* libxml - XML parsing, XPath, etc.
+
+* Examples:
+	* New: ClutterPad (initially by Johan Euphrosine).
+	* New: dbus-banshee, dbus-consolekit, dbus-networkmanager
+	* New: xml-dom.js xml-tree.js, xml-xpath.js.
+	* Pango examples have returned.
+	* Same Seed performance is increased significantly.
+	* Many examples now use "recent" style; some were completely rewritten
+	
+* Improvements to test system, and quite a few more tests.
+
+* Improvements to error checking/handling in signal code.
+
+* Reorganization of API related to GClosure handling, much cleaner and easier.
+
+* Several new API methods.
+
+* GC related crash fixes.
+
+* Improvements to seed_value_to_string (mostly formatting improvements).
+
+* Void methods now properly return undefined instead of null.
+
+* seed_make_exception takes format strings now.
+
+== Seed 0.6, "Beatles for Sale" (2009.04.29) ==
+
+* Significant build fixes and cleanups. Should build on more distros
+  with weird libffis now.
+
+* Depend on GObject-introspection from GIT.
+
+* Some API additions.
+
+* Reimplement Seed.import_namespace in terms of the new imports system,
+  will be entirely deprecated for 0.6.
+
+* Improve memory management in signals and closures.
+
+* Rewrite the GType subclassing to avoid using FFI, 
+  saves memory and improves performance.
+
+* GType "init" now means "constructor" and not "instance init".
+
+* Signal installation, is now handled by an array on the type definition
+  rather than in class_init (which was clunky and C-like).
+
+* Lots of new documentation, including a documentation index, a description
+  of the mapping from C to JavaScript, an example index, and updates to
+  the rest of the documentation.
+
+* Significant cleanup of all of the examples, a lot of them had bit
+  rotted a bit, being written months ago.
+ 
+== Seed 0.5, "Transformer" (2009.04.16) ==
+
+* Many, many crash fixes.
+
+* Significantly better base memory usage (on the order of MB) for some apps.
+
+* Enums use Gtk.WindowType.NORMAL instead of Gtk.WindowType.Normal.
+  This may break existing code in subtle ways (as Gtk.WindowType.Normal
+  will now be JavaScript null).
+
+* instance_init is now just init when creating new GTypes. This will require 
+  changes in any code using subclassing.
+
+* Enum types are validated when passed in to functions now.
+
+* Complete rewrite of import system, spanning GObject Introspection namespaces, 
+  native modules, and JavaScript files, which is compatible with Gjs.
+
+* Along with above, deprecate Seed.import_namespace.
+
+* New 'os' module, similar to that of Python. Provides access to a significant
+  quantity of low-level system features unavailable from GLib.
+
+* Significant updates to Canvas module - most features are compatible with the
+  Mozilla/WebKit implementations at this point.
+
+* Clutter 0.9 animation API wrappers.
+
+* Add seed_repl_expose; gives the ability to drop to a JavaScript REPL from
+  within C, and magically expose JSValueRefs to JS in a simple way.
+
+* Seed.readline history persists between sessions (stored in ~/.seed_history)
+
+* Support for several more array types.
+
+* Added Seed.breakpoint(), which inserts a breakpoint instruction.
+
+* API additions: Lots of API additions. Including a significant amount 
+of API documentation.
+
+* New examples:
+    * opengl-glib examples (teapot, gears, triangle)
+    * Gtk Twitter client (from the Ars Technica article)
+    * Same Seed (Clutter 0.9 rewrite of Same Gnome)
+    * Clutter-COGL example
+    * Reddit client (Gio and JSON)
+    * Library of Clutter "slide transitions"
+    * Rewrote clutter example for 0.9
+
+* The Lights Off example now lives in Gnome Games.
+
+== Seed 0.3, "Wednesday Morning 3AM" (2008.12.31) ==
+
+* Lots of memory changes. Memory usage isn't bad anymore, 
+  reference counting actually works (no big leaks or anything anymore
+  ...there are still a few very small ones you can trigger). 
+  Memory usage of most of the examples after they've loaded,
+  has about halved (or more in cases like the browser) since 0.1, 
+  and now compares very favorably to other
+  dynamic languages. Lots of g_slice_alloc, which comes off
+  quite nicely when creating bunches of small structs like ClutterColor.
+
+* Innumerable bug fixes.
+
+* Structs work now! Things like GdkRectangle: you can allocate them,
+  get at their members, etc.
+    * Including struct "literals, i.e." stage.set_color({red: 255, alpha: 220}).
+
+* GObject subclassing, which was rushed in to a 0.1 point release,
+  is reliable now! signal installation too.
+
+* Multiple context support, rather than the silly global context.
+
+* Support for string array argument conversion.
+
+* C extension Modules
+    * readline
+    * Multiprocessing -- Simple IPC pipes. Just an example, really.
+    * sqlite
+    * canvas -- A little, toy, mostly functional but incomplete HTML Canvas
+                implementation. May be useful until we have cairo bindings.
+                Supports SVG/PDF output.
+
+* Signals use userdata now. The 'this' argument was removed,
+  as it really just lead to organizational issues.
+
+* object.signal.connect is defined for connecting by strings
+  (allows for connecting to detailed signals, like property notifications)
+
+* 'out' arguments of methods work, granted in a rather poor fashion,
+  not sure of the best way to do this yet.
+
+* Enums use Gtk.WindowType.Normal instead of Gtk.WindowType.normal,
+  may break existing code in subtle ways (as Gtk.WindowType.normal
+  will now be JavaScript null).
+
+* Licensing update - libseed is LGPL. The trivial examples are BSD,
+  the more complete ones are GPL.
+
+* Lots of leaks fixed, and also some reference bugs that lead to crashing.
+
+* External API is pretty usable now.
+
+* External API example (Turtle Graphics)
+
+* Threading sort of works now. It's rather unpredictable,
+  but async callbacks and stuff are fine.
+
+* Many more Seed examples. Ranging from Gnio Server, to threading. The
+  browser example is pretty neat now, and has sqlite bookmarks, WebInspector,
+  and a few other tidbits. lightsoff and browser are the two highlight examples
+  to play with.
+
+* Skeleton GTK-Doc for API 
+
+* New builtins: Seed.spawn, Seed.repl/glib_repl/thread_repl.
+  Kind of useful for debugging. 
+
+* Removed builtins: Seed.prototype: Now use Gtk.Window.prototype 
+                    Seed.closure, Automatically handled now.
+                    Seed.closure_native, automagic.
+                    Seed.readline, moved in to module.

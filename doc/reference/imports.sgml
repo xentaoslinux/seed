@@ -1,0 +1,87 @@
+<refentry id="seed-importer" revision="05 Jul 2009">
+<refmeta>
+<refentrytitle>Importer</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>SEED Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>Importer</refname>
+<refpurpose>
+Importing gobject-introspection namespaces, native modules, and JavaScript modules
+</refpurpose>
+</refnamediv>
+  
+    <refsect1 id="git">
+      <title>Overview</title>
+      <para>The Seed importer provides a way for applications written in JavaScript to reference functions outside of the current file. This is the heart of Seed's ability to work with other parts of the GNOME stack, as well as a way to write reasonably structured and sensible complex applications from JavaScript. The importer allows access to four types of external objects:</para>
+
+      <itemizedlist>                                                                                                                                                  
+	<listitem>GObject-Introspection namespaces, which provide access to functiosn and data which were scanned using gobject-introspection from other C libraries; this is how one accesses most of the libraries of the GNOME stack from JavaScript</listitem> 
+	<listitem>Native modules, which provide a way to load arbitrary shared libraries tailored explicitly to the Seed API, which often offer much higher performance for critical code, or provide an easy way to bind code (by hand) which the introspection scanner cannot parse.</listitem>
+	<listitem>JavaScript modules, which provide a way to access (in a namespaced manner) the global object of another script, offering a simple way to modularize code written against Seed.</listitem>
+	<listitem>Directories, which simply contain, as properties on the object the importer returns, the contents of the directory. (expand, fix. this is confusing and misplaced)</listitem>
+      </itemizedlist>
+      <para>The global 'imports' object represents the runtime-side portion of the importer; all of your interactions with the importer will take place through this object.</para>
+    </refsect1>
+
+    <refsect1>
+      <title>The Imports Search Path</title>
+      <para>The path which the importer searches for native modules and JavaScript modules is defined by the searchPath property on the 'imports' global. This should be a JavaScript array of strings representing the order and locations to search for these modules; the default set of paths includes various Seed system directories, the directory in which the currently running script is located, and the current directory, in that order. You can change the path at any time; if an invalid value is assigned, the importer will throw an exception the next time something is imported, <emphasis>not</emphasis> when the property is set.</para>
+      <example>
+	<title>Adding a directory to the search path</title>
+<programlisting>
+imports.searchPath.unshift("/usr/local/share/random-seed-program-scripts/");
+</programlisting>
+      </example>
+    </refsect1>
+
+    <refsect1>
+      <title>Importing GObject-Introspection namespaces</title>
+      <para>GObject-Introspection provides the metadata required in order to call functions, connect to signals, and interact with properties within any library which has been scanned. The hows and whys of introspection are outside of the scope of this article, but how to utilize this data is central to the very tenents of Seed (the minimal platform possible to interact with GObject-based libraries from a pleasant language).</para>
+      <para>Namespaces are loaded as requested, and are loaded only once throughout the lifetime of a Seed program (subsequent requests for the same namespace will return the same object provided previously). The special property 'gi' on the imports global represents the interface for loading these namespaces. A request to import Gtk might look like the following:</para>
+
+      <example>
+	<title>Using 'imports.gi' to import the Gtk namespace</title>
+<programlisting>
+Gtk = imports.gi.Gtk;
+</programlisting>
+      </example>
+
+      <para>This will import the Gtk namespace from GObject-Introspection, and assign it to the global "Gtk" object. Afterwards, Gtk-related functions can be accessed as properties of said object. Imports will <emphasis>never</emphasis> add values to the global object or affect anything outside of their namespace.</para>
+      <para>By default, 'imports.gi.NameSpace' will return the most recent installed version of the imported namespace; in order to request a different version, or to mark your program as requiring a particular version, the "imports.gi.versions.NameSpace" property can be set. Keep in mind that versioning for GObject-Introspection namespaces is slightly different from the actual library version numbers; for example, the version for Gtk is still "2.0", even though we're many versions past that. The import will raise an exception if the requested version could not be loaded:</para>
+
+      <example>
+	<title>Using 'imports.gi.versions' to require Clutter 0.8</title>
+<programlisting>
+imports.gi.versions.Clutter = "0.8";
+
+try
+{
+    Clutter = imports.gi.Clutter;
+}
+catch(e)
+{
+    print("Clutter 0.8 is not installed!");
+}
+</programlisting>
+      </example>
+    </refsect1>
+
+    <refsect1>
+      <title>Importing Native Modules</title>
+      <para>Seed ships with a number of (link!) native modules, which provide access to various parts of the system which GObject-Introspection cannot provide proper metadata for. An application developer could also decide to write performance-critical parts of their code as a native Seed module, as well, as one of the numerous ways to interface C with Seed.</para>
+      <para>Native modules are loaded just like GObject-Introspection namespaces, except as toplevel objects on "imports", instead of "imports.gi". For example, to load the readline module that ships with Seed, one could:</para>
+ 
+     <example>
+	<title>Loading the native module "readline"</title>
+<programlisting>
+readline = imports.readline;
+</programlisting>
+      </example>
+
+     <para>Seed searches the imports search path for native modules; if it finds a file with the given name, the prefix "seed_" and the same suffix as is used for shared libraries on your system (.so on Linux, .dylib on Mac OS X, etc.), it will assume this is a native module and load and initialize it as such. For example, the readline module loaded above is named <filename>seed_readline.so</filename> on a recent Linux machine.</para>
+
+    </refsect1>
+
+</refentry>

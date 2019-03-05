@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Initialization</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="Seed Reference Manual">
+<link rel="up" href="api.html" title="Part III. Seed API Reference">
+<link rel="prev" href="api.html" title="Part III. Seed API Reference">
+<link rel="next" href="seed-Contexts.html" title="Working with Contexts">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="api.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="api.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Seed Reference Manual</th>
+<td><a accesskey="n" href="seed-Contexts.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#seed-Initialization.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#seed-Initialization.description" class="shortcut">Description</a>
+</td></tr>
+</table>
+<div class="refentry">
+<a name="seed-Initialization"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="seed-Initialization.top_of_page"></a>Initialization</span></h2>
+<p>Initialization — Overall setup of the Seed engine</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="seed-Initialization.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+#include &lt;seed/seed.h&gt;
+
+struct              <a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine">SeedEngine</a>;
+<a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="returnvalue">SeedEngine</span></a> *        <a class="link" href="seed-Initialization.html#seed-init" title="seed_init ()">seed_init</a>                           (<em class="parameter"><code><span class="type">gint</span> *argc</code></em>,
+                                                         <em class="parameter"><code><span class="type">gchar</span> ***argv</code></em>);
+<a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="returnvalue">SeedEngine</span></a> *        <a class="link" href="seed-Initialization.html#seed-init-with-context-group" title="seed_init_with_context_group ()">seed_init_with_context_group</a>        (<em class="parameter"><code><span class="type">gint</span> *argc</code></em>,
+                                                         <em class="parameter"><code><span class="type">gchar</span> ***argv</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContextGroup" title="SeedContextGroup"><span class="type">SeedContextGroup</span></a> group</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="seed-Initialization.html#seed-engine-set-search-path" title="seed_engine_set_search_path ()">seed_engine_set_search_path</a>         (<em class="parameter"><code><a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="type">SeedEngine</span></a> *eng</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">gchar</span> *path</code></em>);
+<span class="returnvalue">gchar</span> **            <a class="link" href="seed-Initialization.html#seed-engine-get-search-path" title="seed_engine_get_search_path ()">seed_engine_get_search_path</a>         (<em class="parameter"><code><a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="type">SeedEngine</span></a> *eng</code></em>);
+</pre>
+</div>
+<div class="refsect1">
+<a name="seed-Initialization.description"></a><h2>Description</h2>
+<p>
+Before any other Seed functions can be used, you must initialize the engine, which creates an initial JavaScript context and sets up JavaScriptCore and GLib. To do this in most cases, you will use <a class="link" href="seed-Initialization.html#seed-init" title="seed_init ()"><code class="function">seed_init()</code></a>, which will provide you with a <a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="type">SeedEngine</span></a>. Only one <a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="type">SeedEngine</span></a> is permitted per application; use a <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> to sandbox code execution.
+</p>
+<div class="example">
+<a name="idm10656"></a><p class="title"><b>Example 5. Very simple <code class="function">main</code> function for a Seed program</b></p>
+<div class="example-contents"><pre class="programlisting">
+int main (int argc, char **argv)
+{
+    SeedEngine * eng;
+    SeedScript * script;
+ 
+    /* Initialize the Seed engine */
+    eng = seed_init(&amp;argc, &amp;argv);
+ 
+    /* Create a simple <a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript">SeedScript</a> */
+    script = seed_make_script(eng-&gt;context, "print('Hello, world!')", NULL, 0);
+ 
+    /* Evaluate the <a class="link" href="seed-Evaluation.html#SeedScript" title="SeedScript">SeedScript</a> in the default context */
+    seed_evaluate(eng-&gt;context, script, 0);
+ 
+    g_free(script);
+    return 0;
+}
+</pre></div>
+</div>
+<br class="example-break">
+</div>
+<div class="refsect1">
+<a name="seed-Initialization.details"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="SeedEngine"></a><h3>struct SeedEngine</h3>
+<pre class="programlisting">struct SeedEngine {
+	JSGlobalContextRef context;
+	JSObjectRef global;
+	gchar **search_path;
+
+	JSContextGroupRef group;
+};
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-init"></a><h3>seed_init ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="returnvalue">SeedEngine</span></a> *        seed_init                           (<em class="parameter"><code><span class="type">gint</span> *argc</code></em>,
+                                                         <em class="parameter"><code><span class="type">gchar</span> ***argv</code></em>);</pre>
+<p>
+Initializes a new <a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="type">SeedEngine</span></a>. This involves initializing GLib, creating
+an initial context with all of the default globals, and initializing
+various internal parts of Seed.
+</p>
+<p>
+This function should only be called once within a single Seed application.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>argc</code></em> :</span></p></td>
+<td>A reference to the number of arguments remaining to parse.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>argv</code></em> :</span></p></td>
+<td>A reference to an array of string arguments remaining to parse.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>The newly created and initialized <a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="type">SeedEngine</span></a>.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-init-with-context-group"></a><h3>seed_init_with_context_group ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="returnvalue">SeedEngine</span></a> *        seed_init_with_context_group        (<em class="parameter"><code><span class="type">gint</span> *argc</code></em>,
+                                                         <em class="parameter"><code><span class="type">gchar</span> ***argv</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContextGroup" title="SeedContextGroup"><span class="type">SeedContextGroup</span></a> group</code></em>);</pre>
+<p>
+Initializes a new <a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="type">SeedEngine</span></a>. This involves initializing GLib, creating
+an initial context (in <span class="type">group</span>) with all of the default globals, and
+initializing various internal parts of Seed.
+</p>
+<p>
+This function should only be called once within a single Seed application.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>argc</code></em> :</span></p></td>
+<td>A reference to the number of arguments remaining to parse.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>argv</code></em> :</span></p></td>
+<td>A reference to an array of string arguments remaining to parse.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>group</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContextGroup" title="SeedContextGroup"><span class="type">SeedContextGroup</span></a> within which to create the initial context.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>The newly created and initialized <a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="type">SeedEngine</span></a>.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-engine-set-search-path"></a><h3>seed_engine_set_search_path ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                seed_engine_set_search_path         (<em class="parameter"><code><a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="type">SeedEngine</span></a> *eng</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">gchar</span> *path</code></em>);</pre>
+<p>
+Sets the search path for the imports system.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>eng</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="type">SeedEngine</span></a>, on which to set the path.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>path</code></em> :</span></p></td>
+<td>A <span class="type">const</span> gchar*, a colon separated string containing the path to set</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-engine-get-search-path"></a><h3>seed_engine_get_search_path ()</h3>
+<pre class="programlisting"><span class="returnvalue">gchar</span> **            seed_engine_get_search_path         (<em class="parameter"><code><a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="type">SeedEngine</span></a> *eng</code></em>);</pre>
+<p>
+Retrieves the search path for the imports system. The returned value is
+owned by the <a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="type">SeedEngine</span></a>, and shouldn't be freed by the application writer.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>eng</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="type">SeedEngine</span></a>, to get the currently set search path.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A null-terminated array of strings containing the paths.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.18</div>
+</body>
+</html>

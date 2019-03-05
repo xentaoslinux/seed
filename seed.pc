@@ -1,0 +1,13 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+bindir=${exec_prefix}/bin
+includedir=${prefix}/include
+
+Cflags: -I${includedir}/seed-gtk3
+Requires: javascriptcoregtk-3.0 gobject-introspection-1.0 glib-2.0 gobject-2.0 gmodule-2.0 gthread-2.0
+Libs: -L${libdir} -lseed-gtk3
+
+Name: Seed
+Description: Seed Javascript Interpreter.
+Version: 3.8.1

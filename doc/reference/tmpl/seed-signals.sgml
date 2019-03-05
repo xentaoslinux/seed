@@ -1,0 +1,45 @@
+<!-- ##### SECTION Title ##### -->
+GObject Signals
+
+<!-- ##### SECTION Short_Description ##### -->
+Connecting JavaScript functions to signals
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+Long description
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### FUNCTION seed_signal_connect ##### -->
+<para>
+
+</para>
+
+@ctx: 
+@object: 
+@signal: 
+@script: 
+
+
+<!-- ##### FUNCTION seed_signal_connect_value ##### -->
+<para>
+
+</para>
+
+@ctx: 
+@object: 
+@signal: 
+@function: 
+@user_data: 
+
+

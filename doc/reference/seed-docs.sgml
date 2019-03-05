@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY version SYSTEM "version.xml">
+]>
+<book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
+  <bookinfo>
+    <title>Seed Reference Manual</title>
+    <releaseinfo>
+      Documentation for Seed &version;.
+      The latest version of this documentation can be found on-line at
+      <ulink role="online-location" url="http://library.gnome.org/devel/seed/unstable/">http://library.gnome.org/devel/seed/unstable/</ulink>.
+    </releaseinfo>
+  </bookinfo>
+
+  <part id="seed">
+    <title>Seed Overview</title>
+    <xi:include href="introduction.sgml"/>
+    <xi:include href="building.sgml"/>
+    <xi:include href="contact.sgml"/>
+  </part>
+  
+  <part id="js">
+    <title>Seed JavaScript Reference</title>
+    <para>This is the documentation for the JavaScript runtime side of Seed.</para>
+    <xi:include href="imports.sgml" />
+  </part>
+  
+  <part id="api">
+    <title>Seed API Reference</title>
+    <para>This is the documentation for the C API of Seed, used for embedding, and creating native C modules.</para>
+    <xi:include href="xml/seed-main.xml"/>
+    <xi:include href="xml/seed-context.xml"/>
+    <xi:include href="xml/seed-eval.xml"/>
+    <xi:include href="xml/seed-exception.xml"/>
+    <xi:include href="xml/seed-signals.xml"/>
+    <chapter id="types">
+        <title>Values and Type Conversion</title>
+        <xi:include href="xml/seed-typeconversion.xml"/>
+        <xi:include href="xml/seed-nativetypes.xml"/>
+        <xi:include href="xml/seed-object.xml"/>
+    </chapter>
+    <xi:include href="xml/seed-nativefuncs.xml"/>
+    <xi:include href="xml/seed-jsclass.xml"/>
+    <xi:include href="xml/seed-closure.xml"/>
+    <xi:include href="xml/seed-modules.xml"/>
+  </part>
+  
+  <part id="modules">
+    <title>Seed Module Reference</title>
+    <para>This is the documentation for the various modules included with Seed.</para>
+    <xi:include href="../modules/readline/readline.xml"/>
+    <xi:include href="../modules/sqlite/sqlite.xml"/>
+    <xi:include href="../modules/gtkbuilder/gtkbuilder.xml"/>
+    <xi:include href="../modules/sandbox/sandbox.xml"/>
+  </part>
+  
+  <index>
+    <title>Index</title>
+  </index>
+</book>

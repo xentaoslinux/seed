@@ -1,0 +1,322 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Exception Handling</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="Seed Reference Manual">
+<link rel="up" href="api.html" title="Part III. Seed API Reference">
+<link rel="prev" href="seed-Evaluation.html" title="Evaluating JavaScript">
+<link rel="next" href="seed-Signals.html" title="GObject Signals">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="seed-Evaluation.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="api.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Seed Reference Manual</th>
+<td><a accesskey="n" href="seed-Signals.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#seed-Exceptions.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#seed-Exceptions.description" class="shortcut">Description</a>
+</td></tr>
+</table>
+<div class="refentry">
+<a name="seed-Exceptions"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="seed-Exceptions.top_of_page"></a>Exception Handling</span></h2>
+<p>Exception Handling — Throwing and catching exceptions</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="seed-Exceptions.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+#include &lt;seed/seed.h&gt;
+
+typedef             <a class="link" href="seed-Exceptions.html#SeedException" title="SeedException">SeedException</a>;
+<span class="returnvalue">void</span>                <a class="link" href="seed-Exceptions.html#seed-make-exception" title="seed_make_exception ()">seed_make_exception</a>                 (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> exception</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">gchar</span> *name</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">gchar</span> *message</code></em>,
+                                                         <em class="parameter"><code>...</code></em>);
+<span class="returnvalue">gchar</span> *             <a class="link" href="seed-Exceptions.html#seed-exception-get-name" title="seed_exception_get_name ()">seed_exception_get_name</a>             (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> exception</code></em>);
+<span class="returnvalue">gchar</span> *             <a class="link" href="seed-Exceptions.html#seed-exception-get-message" title="seed_exception_get_message ()">seed_exception_get_message</a>          (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> exception</code></em>);
+<span class="returnvalue">guint</span>               <a class="link" href="seed-Exceptions.html#seed-exception-get-line" title="seed_exception_get_line ()">seed_exception_get_line</a>             (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> exception</code></em>);
+<span class="returnvalue">gchar</span> *             <a class="link" href="seed-Exceptions.html#seed-exception-get-file" title="seed_exception_get_file ()">seed_exception_get_file</a>             (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> exception</code></em>);
+<span class="returnvalue">gchar</span> *             <a class="link" href="seed-Exceptions.html#seed-exception-to-string" title="seed_exception_to_string ()">seed_exception_to_string</a>            (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> exception</code></em>);
+</pre>
+</div>
+<div class="refsect1">
+<a name="seed-Exceptions.description"></a><h2>Description</h2>
+<p>
+Seed uses exceptions as a method of handling runtime errors within scripts. An exception consists of a name (a list of commonly-used exception names is below), a message, detailing the error, and the line number and filename from which the exception was raised. If Seed cannot determine from where the exception was raised, the line number and filename will be undefined. <a class="link" href="seed-Exceptions.html#seed-exception-to-string" title="seed_exception_to_string ()"><code class="function">seed_exception_to_string()</code></a> provides a simple way to convert all of these into a consistent representation to display to users.
+</p>
+<p>
+All Seed callbacks take an exception argument; calling
+<a class="link" href="seed-Exceptions.html#seed-make-exception" title="seed_make_exception ()"><code class="function">seed_make_exception()</code></a> with this argument and the details you wish to
+fill it with will propogate that exception up the chain. Exceptions
+can be <span class="emphasis"><em>caught</em></span> either by a try/catch block in the
+calling JavaScript, or by observing the exception property, dealing
+with it, and then clearing the exception.
+It is important to note that calling <a class="link" href="seed-Exceptions.html#seed-make-exception" title="seed_make_exception ()"><code class="function">seed_make_exception()</code></a> does not
+in fact <span class="emphasis"><em>throw</em></span> the exception, but just creates an
+object which, when stored in the exception pointer passed to a callback,
+causes JSC to throw an exception once flow is returned.
+</p>
+<div class="example">
+<a name="idp8068800"></a><p class="title"><b>Example 9. Throw an exception, because <code class="function">random_callback</code> was called with the wrong number of arguments</b></p>
+<div class="example-contents"><pre class="programlisting">
+SeedValue random_callback(SeedContext ctx,
+                          SeedObject function,
+                          SeedObject this_object,
+                          gsize argument_count,
+                          const SeedValue arguments[],
+                          SeedException *exception)
+{
+    ...
+ 
+    if(argument_count != 1)
+    {
+        seed_make_exception(ctx, exception, "ArgumentError",
+                            "wrong number of arguments; expected 1, got %Zd",
+                            argument_count);
+        return seed_make_undefined(ctx);
+    }
+ 
+    ...
+}
+</pre></div>
+</div>
+<br class="example-break"><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Predefined Exception Names</h3>
+<p>
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+<span class="emphasis"><em>InvalidPropertyValue</em></span> - a property was set to a value out of range</li>
+<li class="listitem">
+<span class="emphasis"><em>PropertyError</em></span> - a warning occurred in GLib while trying to set a property</li>
+<li class="listitem">
+<span class="emphasis"><em>ArgumentError</em></span> - a function was called with the wrong number of arguments</li>
+<li class="listitem">
+<span class="emphasis"><em>ConversionError</em></span> - one of the type conversion functions threw an exception</li>
+<li class="listitem">
+<span class="emphasis"><em>TypeError</em></span> - a required argument was of the wrong type</li>
+<li class="listitem">
+<span class="emphasis"><em>SyntaxError</em></span> - a syntax error was thrown from JavaScriptCore</li>
+<li class="listitem">
+<span class="emphasis"><em>ParseError</em></span> - a parsing error was thrown from JavaScriptCore (make sure you close all of your brackets!)</li>
+<li class="listitem">
+<span class="emphasis"><em>ReferenceError</em></span> - a reference error was thrown from JavaScriptCore (most likely, you tried to access a variable which was undefined)</li>
+</ul></div>
+<p>
+</p>
+</div>
+</div>
+<div class="refsect1">
+<a name="seed-Exceptions.details"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="SeedException"></a><h3>SeedException</h3>
+<pre class="programlisting">typedef gpointer SeedException;
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-make-exception"></a><h3>seed_make_exception ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                seed_make_exception                 (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> exception</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">gchar</span> *name</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">gchar</span> *message</code></em>,
+                                                         <em class="parameter"><code>...</code></em>);</pre>
+<p>
+Creates a new JavaScript exception with the given attributes.
+</p>
+<p>
+The line number and file name of the exception created will be undefined.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>exception</code></em> :</span></p></td>
+<td>A reference to a <a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> in which to store the exception.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>name</code></em> :</span></p></td>
+<td>The <span class="type">gchar</span>* representing the exception name.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>message</code></em> :</span></p></td>
+<td>The <span class="type">gchar</span>*, as a printf format string, representing the
+details of the exception.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-exception-get-name"></a><h3>seed_exception_get_name ()</h3>
+<pre class="programlisting"><span class="returnvalue">gchar</span> *             seed_exception_get_name             (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> exception</code></em>);</pre>
+<p>
+Retrieves the name of the given exception; this could be one of the
+predefined exception names given above, or your own name, which should
+be a single CamelCase word, preferably ending in something like "Error".
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>exception</code></em> :</span></p></td>
+<td>A reference to a <a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A <span class="type">gchar</span>* representing the name of <em class="parameter"><code>exception</code></em>.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-exception-get-message"></a><h3>seed_exception_get_message ()</h3>
+<pre class="programlisting"><span class="returnvalue">gchar</span> *             seed_exception_get_message          (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> exception</code></em>);</pre>
+<p>
+Retrieves the message of the given exception; this should be a
+human-readable string describing the exception enough that a developer
+could utilize the message in order to determine where to look to debug
+the problem.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>exception</code></em> :</span></p></td>
+<td>A reference to a <a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A <span class="type">gchar</span>* representing the detailed message of <em class="parameter"><code>exception</code></em>.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-exception-get-line"></a><h3>seed_exception_get_line ()</h3>
+<pre class="programlisting"><span class="returnvalue">guint</span>               seed_exception_get_line             (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> exception</code></em>);</pre>
+<p>
+Retrieves the line number the given exception was thrown from; keep in mind
+that exceptions created from C have an undefined line number.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>exception</code></em> :</span></p></td>
+<td>A reference to a <a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A <span class="type">guint</span> representing the line number from which <em class="parameter"><code>exception</code></em>
+was thrown.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-exception-get-file"></a><h3>seed_exception_get_file ()</h3>
+<pre class="programlisting"><span class="returnvalue">gchar</span> *             seed_exception_get_file             (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> exception</code></em>);</pre>
+<p>
+Retrieves the file name the given exception was thrown from; keep in mind
+that exceptions created from C have an undefined file name.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>exception</code></em> :</span></p></td>
+<td>A reference to a <a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A <span class="type">gchar</span>* representing the name of the file from which
+<em class="parameter"><code>exception</code></em> was thrown.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-exception-to-string"></a><h3>seed_exception_to_string ()</h3>
+<pre class="programlisting"><span class="returnvalue">gchar</span> *             seed_exception_to_string            (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> exception</code></em>);</pre>
+<p>
+Properly formats the name, detailed message, line number, and file name of
+the given extension. This provides a consistent format for printed
+exceptions, to reduce confusion. Please use it if you're exposing exception
+data to the outside world.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>exception</code></em> :</span></p></td>
+<td>A reference to a <a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A <span class="type">gchar</span>* representing the <em class="parameter"><code>exception</code></em>.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.18</div>
+</body>
+</html>

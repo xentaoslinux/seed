@@ -1,0 +1,575 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Working with JavaScript objects</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="Seed Reference Manual">
+<link rel="up" href="types.html" title="Values and Type Conversion">
+<link rel="prev" href="seed-Operating-on-Native-Types.html" title="Operating on JavaScript types">
+<link rel="next" href="seed-Native-Functions.html" title="Creating native functions">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="seed-Operating-on-Native-Types.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="types.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Seed Reference Manual</th>
+<td><a accesskey="n" href="seed-Native-Functions.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#seed-JS-Objects.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#seed-JS-Objects.description" class="shortcut">Description</a>
+</td></tr>
+</table>
+<div class="refentry">
+<a name="seed-JS-Objects"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="seed-JS-Objects.top_of_page"></a>Working with JavaScript objects</span></h2>
+<p>Working with JavaScript objects — Using properties, constructing objects, etc.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="seed-JS-Objects.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+#include &lt;seed/seed.h&gt;
+
+typedef             <a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject">SeedObject</a>;
+<a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="returnvalue">SeedObject</span></a>          <a class="link" href="seed-JS-Objects.html#seed-make-object" title="seed_make_object ()">seed_make_object</a>                    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JavaScript-Classes.html#SeedClass" title="SeedClass"><span class="type">SeedClass</span></a> klass</code></em>,
+                                                         <em class="parameter"><code><span class="type">gpointer</span> private_object</code></em>);
+<a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="returnvalue">SeedObject</span></a>          <a class="link" href="seed-JS-Objects.html#seed-make-array" title="seed_make_array ()">seed_make_array</a>                     (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code>const <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> elements</code></em>,
+                                                         <em class="parameter"><code><span class="type">gsize</span> num_elements</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);
+<a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           <a class="link" href="seed-JS-Objects.html#seed-object-call" title="seed_object_call ()">seed_object_call</a>                    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> this_object</code></em>,
+                                                         <em class="parameter"><code><span class="type">gsize</span> argument_count</code></em>,
+                                                         <em class="parameter"><code>const <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> arguments[]</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="seed-JS-Objects.html#seed-object-set-property-at-index" title="seed_object_set_property_at_index ()">seed_object_set_property_at_index</a>   (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code><span class="type">gint</span> index</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);
+<a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           <a class="link" href="seed-JS-Objects.html#seed-object-get-property-at-index" title="seed_object_get_property_at_index ()">seed_object_get_property_at_index</a>   (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code><span class="type">gint</span> index</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);
+<span class="returnvalue">gboolean</span>            <a class="link" href="seed-JS-Objects.html#seed-object-is-of-class" title="seed_object_is_of_class ()">seed_object_is_of_class</a>             (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> obj</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JavaScript-Classes.html#SeedClass" title="SeedClass"><span class="type">SeedClass</span></a> klass</code></em>);
+<span class="returnvalue">gpointer</span>            <a class="link" href="seed-JS-Objects.html#seed-object-get-private" title="seed_object_get_private ()">seed_object_get_private</a>             (<em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="seed-JS-Objects.html#seed-object-set-private" title="seed_object_set_private ()">seed_object_set_private</a>             (<em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code><span class="type">gpointer</span> value</code></em>);
+<a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           <a class="link" href="seed-JS-Objects.html#seed-object-get-property" title="seed_object_get_property ()">seed_object_get_property</a>            (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">gchar</span> *name</code></em>);
+<span class="returnvalue">gboolean</span>            <a class="link" href="seed-JS-Objects.html#seed-object-set-property" title="seed_object_set_property ()">seed_object_set_property</a>            (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">gchar</span> *name</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>);
+<a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="returnvalue">SeedObject</span></a>          <a class="link" href="seed-JS-Objects.html#seed-object-get-prototype" title="seed_object_get_prototype ()">seed_object_get_prototype</a>           (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> obj</code></em>);
+<span class="returnvalue">gchar</span> **            <a class="link" href="seed-JS-Objects.html#seed-object-copy-property-names" title="seed_object_copy_property_names ()">seed_object_copy_property_names</a>     (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>);
+<span class="returnvalue">void</span>                (<a class="link" href="seed-JS-Objects.html#SeedObjectInitializeCallback" title="SeedObjectInitializeCallback ()">*SeedObjectInitializeCallback</a>)     (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>);
+<span class="returnvalue">void</span>                (<a class="link" href="seed-JS-Objects.html#SeedObjectFinalizeCallback" title="SeedObjectFinalizeCallback ()">*SeedObjectFinalizeCallback</a>)       (<em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>);
+<span class="returnvalue">gboolean</span>            (<a class="link" href="seed-JS-Objects.html#SeedObjectHasPropertyCallback" title="SeedObjectHasPropertyCallback ()">*SeedObjectHasPropertyCallback</a>)    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedString" title="SeedString"><span class="type">SeedString</span></a> string</code></em>);
+<a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           (<a class="link" href="seed-JS-Objects.html#SeedObjectGetPropertyCallback" title="SeedObjectGetPropertyCallback ()">*SeedObjectGetPropertyCallback</a>)    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedString" title="SeedString"><span class="type">SeedString</span></a> property_name</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *e</code></em>);
+<span class="returnvalue">gboolean</span>            (<a class="link" href="seed-JS-Objects.html#SeedObjectSetPropertyCallback" title="SeedObjectSetPropertyCallback ()">*SeedObjectSetPropertyCallback</a>)    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedString" title="SeedString"><span class="type">SeedString</span></a> property_name</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *e</code></em>);
+<span class="returnvalue">gboolean</span>            (<a class="link" href="seed-JS-Objects.html#SeedObjectDeletePropertyCallback" title="SeedObjectDeletePropertyCallback ()">*SeedObjectDeletePropertyCallback</a>) (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedString" title="SeedString"><span class="type">SeedString</span></a> property_name</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *e</code></em>);
+<span class="returnvalue">void</span>                (<a class="link" href="seed-JS-Objects.html#SeedObjectGetPropertyNamesCallback" title="SeedObjectGetPropertyNamesCallback ()">*SeedObjectGetPropertyNamesCallback</a>)
+                                                        (<em class="parameter"><code><span class="type">void</span></code></em>);
+<a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           (<a class="link" href="seed-JS-Objects.html#SeedObjectCallAsFunctionCallback" title="SeedObjectCallAsFunctionCallback ()">*SeedObjectCallAsFunctionCallback</a>) (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> function</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> this_object</code></em>,
+                                                         <em class="parameter"><code><span class="type">gsize</span> argument_count</code></em>,
+                                                         <em class="parameter"><code>const <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> arguments[]</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);
+<span class="returnvalue">gboolean</span>            (<a class="link" href="seed-JS-Objects.html#SeedObjectHasInstanceCallback" title="SeedObjectHasInstanceCallback ()">*SeedObjectHasInstanceCallback</a>)    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> constructor</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> instance_p</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);
+<a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           (<a class="link" href="seed-JS-Objects.html#SeedObjectConvertToTypeCallback" title="SeedObjectConvertToTypeCallback ()">*SeedObjectConvertToTypeCallback</a>)  (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedType" title="enum SeedType"><span class="type">SeedType</span></a> type</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);
+<a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           (<a class="link" href="seed-JS-Objects.html#SeedObjectCallAsConstructorCallback" title="SeedObjectCallAsConstructorCallback ()">*SeedObjectCallAsConstructorCallback</a>)
+                                                        (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> constructor</code></em>,
+                                                         <em class="parameter"><code><span class="type">gsize</span> argument_count</code></em>,
+                                                         <em class="parameter"><code>const <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> arguments[]</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);
+</pre>
+</div>
+<div class="refsect1">
+<a name="seed-JS-Objects.description"></a><h2>Description</h2>
+<p>
+Long description
+</p>
+</div>
+<div class="refsect1">
+<a name="seed-JS-Objects.details"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="SeedObject"></a><h3>SeedObject</h3>
+<pre class="programlisting">typedef gpointer SeedObject;
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-make-object"></a><h3>seed_make_object ()</h3>
+<pre class="programlisting"><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="returnvalue">SeedObject</span></a>          seed_make_object                    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JavaScript-Classes.html#SeedClass" title="SeedClass"><span class="type">SeedClass</span></a> klass</code></em>,
+                                                         <em class="parameter"><code><span class="type">gpointer</span> private_object</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>The <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> in which to create the new object.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A new <a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a>.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-make-array"></a><h3>seed_make_array ()</h3>
+<pre class="programlisting"><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="returnvalue">SeedObject</span></a>          seed_make_array                     (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code>const <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> elements</code></em>,
+                                                         <em class="parameter"><code><span class="type">gsize</span> num_elements</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);</pre>
+<p>
+Creates a JavaScript Array object from <em class="parameter"><code>elements</code></em>, a C-style array of
+SeedValues.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A valid <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>elements</code></em> :</span></p></td>
+<td>An array of <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a>'s with which to populate the array.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>num_elements</code></em> :</span></p></td>
+<td>The number of values, in <em class="parameter"><code>elements</code></em>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>exception</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> in which to store an exception.
+Pass <code class="literal">NULL</code> to ignore exceptions.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A new array object, populated with <em class="parameter"><code>elements</code></em>.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-object-call"></a><h3>seed_object_call ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           seed_object_call                    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> this_object</code></em>,
+                                                         <em class="parameter"><code><span class="type">gsize</span> argument_count</code></em>,
+                                                         <em class="parameter"><code>const <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> arguments[]</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);</pre>
+<p>
+Calls <em class="parameter"><code>object</code></em> as a function.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>object</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> to call.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>argument_count</code></em> :</span></p></td>
+<td>The number of arguments in the <em class="parameter"><code>arguments</code></em> array.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>arguments</code></em> :</span></p></td>
+<td>An array (<em class="parameter"><code>argument_count</code></em> long) of <a href="seed-Native-Type-Conversion.html#SeedValue"><span class="type">SeedValues</span></a> to pass in as the
+function's arguments.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>exception</code></em> :</span></p></td>
+<td>A reference to a <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> in which to store any exceptions.
+Pass <code class="literal">NULL</code> to ignore exceptions.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>The <em class="parameter"><code>SeedValue</code></em> returned by the called function, or <code class="literal">NULL</code> if an
+exception occurs or the object is not a function.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-object-set-property-at-index"></a><h3>seed_object_set_property_at_index ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                seed_object_set_property_at_index   (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code><span class="type">gint</span> index</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);</pre>
+<p>
+Sets the property <em class="parameter"><code>index</code></em> on <em class="parameter"><code>object</code></em> to <em class="parameter"><code>value</code></em>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>object</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> on which to set the property.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>index</code></em> :</span></p></td>
+<td>The index of the property to set.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
+<td>The <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> to use as the property's value.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>exception</code></em> :</span></p></td>
+<td>A reference to a <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> in which to store any exceptions.
+Pass <code class="literal">NULL</code> to ignore exceptions.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-object-get-property-at-index"></a><h3>seed_object_get_property_at_index ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           seed_object_get_property_at_index   (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code><span class="type">gint</span> index</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-object-is-of-class"></a><h3>seed_object_is_of_class ()</h3>
+<pre class="programlisting"><span class="returnvalue">gboolean</span>            seed_object_is_of_class             (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> obj</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JavaScript-Classes.html#SeedClass" title="SeedClass"><span class="type">SeedClass</span></a> klass</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-object-get-private"></a><h3>seed_object_get_private ()</h3>
+<pre class="programlisting"><span class="returnvalue">gpointer</span>            seed_object_get_private             (<em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>);</pre>
+<p>
+Retrieves the private data of <em class="parameter"><code>object</code></em>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>object</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A pointer to the private data of <em class="parameter"><code>object</code></em>.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-object-set-private"></a><h3>seed_object_set_private ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                seed_object_set_private             (<em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code><span class="type">gpointer</span> value</code></em>);</pre>
+<p>
+Sets the private data of <em class="parameter"><code>object</code></em> to <em class="parameter"><code>value</code></em>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>object</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a>.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
+<td>A <span class="type">gpointer</span> to set the private data of <em class="parameter"><code>object</code></em> to.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-object-get-property"></a><h3>seed_object_get_property ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           seed_object_get_property            (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">gchar</span> *name</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>object</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>name</code></em> :</span></p></td>
+<td>The property to get, should be a valid JavaScript identifier</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>The value of the property or the undefined value</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-object-set-property"></a><h3>seed_object_set_property ()</h3>
+<pre class="programlisting"><span class="returnvalue">gboolean</span>            seed_object_set_property            (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">gchar</span> *name</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>object</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>name</code></em> :</span></p></td>
+<td>The property to set, should be a valid JavaScript identifier</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
+<td>The value to set the property to.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+<code class="literal">TRUE</code> on success, <code class="literal">FALSE</code> otherwise.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-object-get-prototype"></a><h3>seed_object_get_prototype ()</h3>
+<pre class="programlisting"><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="returnvalue">SeedObject</span></a>          seed_object_get_prototype           (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> obj</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A valid <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>obj</code></em> :</span></p></td>
+<td>A <a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>The prototype of <em class="parameter"><code>obj</code></em>.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="seed-object-copy-property-names"></a><h3>seed_object_copy_property_names ()</h3>
+<pre class="programlisting"><span class="returnvalue">gchar</span> **            seed_object_copy_property_names     (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td>A valid <a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>object</code></em> :</span></p></td>
+<td>An object from which to copy property names.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A <code class="literal">NULL</code> terminated array containing the property names of <em class="parameter"><code>object</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="SeedObjectInitializeCallback"></a><h3>SeedObjectInitializeCallback ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                (*SeedObjectInitializeCallback)     (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="SeedObjectFinalizeCallback"></a><h3>SeedObjectFinalizeCallback ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                (*SeedObjectFinalizeCallback)       (<em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="SeedObjectHasPropertyCallback"></a><h3>SeedObjectHasPropertyCallback ()</h3>
+<pre class="programlisting"><span class="returnvalue">gboolean</span>            (*SeedObjectHasPropertyCallback)    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedString" title="SeedString"><span class="type">SeedString</span></a> string</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="SeedObjectGetPropertyCallback"></a><h3>SeedObjectGetPropertyCallback ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           (*SeedObjectGetPropertyCallback)    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedString" title="SeedString"><span class="type">SeedString</span></a> property_name</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *e</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="SeedObjectSetPropertyCallback"></a><h3>SeedObjectSetPropertyCallback ()</h3>
+<pre class="programlisting"><span class="returnvalue">gboolean</span>            (*SeedObjectSetPropertyCallback)    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedString" title="SeedString"><span class="type">SeedString</span></a> property_name</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> value</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *e</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="SeedObjectDeletePropertyCallback"></a><h3>SeedObjectDeletePropertyCallback ()</h3>
+<pre class="programlisting"><span class="returnvalue">gboolean</span>            (*SeedObjectDeletePropertyCallback) (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedString" title="SeedString"><span class="type">SeedString</span></a> property_name</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *e</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="SeedObjectGetPropertyNamesCallback"></a><h3>SeedObjectGetPropertyNamesCallback ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                (*SeedObjectGetPropertyNamesCallback)
+                                                        (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="SeedObjectCallAsFunctionCallback"></a><h3>SeedObjectCallAsFunctionCallback ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           (*SeedObjectCallAsFunctionCallback) (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> function</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> this_object</code></em>,
+                                                         <em class="parameter"><code><span class="type">gsize</span> argument_count</code></em>,
+                                                         <em class="parameter"><code>const <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> arguments[]</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="SeedObjectHasInstanceCallback"></a><h3>SeedObjectHasInstanceCallback ()</h3>
+<pre class="programlisting"><span class="returnvalue">gboolean</span>            (*SeedObjectHasInstanceCallback)    (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> constructor</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> instance_p</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="SeedObjectConvertToTypeCallback"></a><h3>SeedObjectConvertToTypeCallback ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           (*SeedObjectConvertToTypeCallback)  (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> object</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Native-Type-Conversion.html#SeedType" title="enum SeedType"><span class="type">SeedType</span></a> type</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="SeedObjectCallAsConstructorCallback"></a><h3>SeedObjectCallAsConstructorCallback ()</h3>
+<pre class="programlisting"><a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="returnvalue">SeedValue</span></a>           (*SeedObjectCallAsConstructorCallback)
+                                                        (<em class="parameter"><code><a class="link" href="seed-Contexts.html#SeedContext" title="SeedContext"><span class="type">SeedContext</span></a> ctx</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="type">SeedObject</span></a> constructor</code></em>,
+                                                         <em class="parameter"><code><span class="type">gsize</span> argument_count</code></em>,
+                                                         <em class="parameter"><code>const <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue"><span class="type">SeedValue</span></a> arguments[]</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="seed-Exceptions.html#SeedException" title="SeedException"><span class="type">SeedException</span></a> *exception</code></em>);</pre>
+<p>
+</p>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.18</div>
+</body>
+</html>

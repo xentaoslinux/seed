@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>Seed canvas Module Documentation</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" href="../style.css" type="text/css" charset="utf-8" />
+	<script type="text/javascript" src="../sh.js"></script>
+    <script type="text/javascript" src="../sh_js.js"></script>
+    <link type="text/css" rel="stylesheet" href="../sh.css" />
+</head>
+<body onload="sh_highlightDocument();">
+<div id="header">Seed <i>canvas</i> Module</div>
+<div id="subheader">v.@VERSION@</div>
+<div class="section"><b>Usage</b></div>
+<p>
+In order to use functions from the canvas module, you must first import it:
+</p>
+<pre class="sh_javascript">
+canvas = imports.canvas;
+</pre>
+<div class="section"><b>External Documentation</b></div>
+<p>
+The canvas module is actually an implementation of a subset of the <a href="https://developer.mozilla.org/en/Canvas_tutorial">HTML Canvas</a> element. Many of the functions from Canvas directly translate into Seed, and you can use <a href="http://www.whatwg.org/specs/web-apps/current-work/#the-canvas-element">any</a> <a href="https://developer.mozilla.org/en/HTML/Canvas">Canvas</a> <a href="http://developer.apple.com/documentation/appleapplications/Conceptual/SafariJSProgTopics/Tasks/Canvas.html">documentation</a> to help develop Seed canvas code. The drawing functions will not be redocumented here.
+</p>
+<div class="section"><b>new CairoCanvas</b>(cairo)<br/>
+<b>new PDFCanvas</b>(filename, width, height)<br/>
+<b>new SVGCanvas</b>(filename, width, height)<br/>
+<b>new ImageCanvas</b>(filename, width, height)</div>
+<p>
+Construct a Canvas with a particular output format. <b>CairoCanvas</b>es are constructed given a <i>cairo</i> to draw to, while the others output to a file, and need to be given a size for the canvas.
+</p>
+</body>
+</html>

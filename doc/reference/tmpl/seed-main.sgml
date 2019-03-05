@@ -1,0 +1,94 @@
+<!-- ##### SECTION Title ##### -->
+Initialization
+
+<!-- ##### SECTION Short_Description ##### -->
+Overall setup of the Seed engine
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+Before any other Seed functions can be used, you must initialize the engine, which creates an initial JavaScript context and sets up JavaScriptCore and GLib. To do this in most cases, you will use seed_init(), which will provide you with a #SeedEngine. Only one #SeedEngine is permitted per application; use a #SeedContext to sandbox code execution.
+</para>
+
+<example>
+<title>Very simple <function>main</function> function for a Seed program</title>
+<programlisting>
+int main (int argc, char **argv)
+{
+    SeedEngine * eng;
+    SeedScript * script;
+&nbsp;
+    /* Initialize the Seed engine */
+    eng = seed_init(&amp;argc, &amp;argv);
+&nbsp;
+    /* Create a simple #SeedScript */
+    script = seed_make_script(eng->context, "print('Hello, world!')", NULL, 0);
+&nbsp;
+    /* Evaluate the #SeedScript in the default context */
+    seed_evaluate(eng->context, script, 0);
+&nbsp;
+    g_free(script);
+    return 0;
+}
+</programlisting>
+</example>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### STRUCT SeedEngine ##### -->
+<para>
+
+</para>
+
+@context: 
+@global: 
+@search_path: 
+@group: 
+
+<!-- ##### FUNCTION seed_init ##### -->
+<para>
+
+</para>
+
+@argc: 
+@argv: 
+@Returns: 
+
+
+<!-- ##### FUNCTION seed_init_with_context_group ##### -->
+<para>
+
+</para>
+
+@argc: 
+@argv: 
+@group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION seed_engine_set_search_path ##### -->
+<para>
+
+</para>
+
+@eng: 
+@path: 
+
+
+<!-- ##### FUNCTION seed_engine_get_search_path ##### -->
+<para>
+
+</para>
+
+@eng: 
+@Returns: 
+
+

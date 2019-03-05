@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Seed Modules</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="Seed Reference Manual">
+<link rel="up" href="api.html" title="Part III. Seed API Reference">
+<link rel="prev" href="seed-SeedClosure.html" title="Using JavaScript closures">
+<link rel="next" href="modules.html" title="Part IV. Seed Module Reference">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="seed-SeedClosure.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="api.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Seed Reference Manual</th>
+<td><a accesskey="n" href="modules.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#seed-Modules.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#seed-Modules.description" class="shortcut">Description</a>
+</td></tr>
+</table>
+<div class="refentry">
+<a name="seed-Modules"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="seed-Modules.top_of_page"></a>Seed Modules</span></h2>
+<p>Seed Modules — Native C modules for Seed</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="seed-Modules.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+#include &lt;seed/seed.h&gt;
+
+#define             <a class="link" href="seed-Modules.html#CHECK-ARG-COUNT:CAPS" title="CHECK_ARG_COUNT()">CHECK_ARG_COUNT</a>                     (name,
+                                                         argnum)
+#define             <a class="link" href="seed-Modules.html#DEFINE-ENUM-MEMBER:CAPS" title="DEFINE_ENUM_MEMBER()">DEFINE_ENUM_MEMBER</a>                  (holder,
+                                                         member)
+#define             <a class="link" href="seed-Modules.html#DEFINE-ENUM-MEMBER-EXT:CAPS" title="DEFINE_ENUM_MEMBER_EXT()">DEFINE_ENUM_MEMBER_EXT</a>              (holder,
+                                                         name,
+                                                         val)
+<a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="returnvalue">SeedObject</span></a>          (<a class="link" href="seed-Modules.html#SeedModuleInitCallback" title="SeedModuleInitCallback ()">*SeedModuleInitCallback</a>)           (<em class="parameter"><code><a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="type">SeedEngine</span></a> *eng</code></em>);
+</pre>
+</div>
+<div class="refsect1">
+<a name="seed-Modules.description"></a><h2>Description</h2>
+<p>
+Seed includes a simple system for creating C modules which can be loaded and manipulated from JavaScript. This is used for implementing performance-critical code closer to the silicon, as well as binding non-introspectable libraries in an attractive way.
+</p>
+<p>Numerous binding modules are included in the Seed repository; when writing a new native module, it would be wise to look over these before beginning, as they have many tidbits of useful knowledge for writing modules.</p>
+<div class="example">
+<a name="idp5746544"></a><p class="title"><b>Example 11. Very simple example C module</b></p>
+<div class="example-contents"><pre class="programlisting">
+#include &lt;glib.h&gt;
+#include &lt;seed-module.h&gt;
+SeedObject seed_module_init(SeedEngine * eng)
+{
+    /* Say hello! */
+    g_print("Hello, Seed Module World!\n");
+ 
+    /* Return an empty object as the module's namespace */
+    return seed_make_object (eng-&gt;context, NULL, NULL);
+}
+</pre></div>
+</div>
+<br class="example-break"><p>Above is a C module which does absolutely nothing useful. When a module is loaded, <code class="function">seed_module_init()</code> is called, which should have the signature of <a class="link" href="seed-Modules.html#SeedModuleInitCallback" title="SeedModuleInitCallback ()"><code class="function">SeedModuleInitCallback()</code></a>. You're passed the global <a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="type">SeedEngine</span></a>, and the value you return is the namespace for your module. Say, for example, you place a static function on that object:</p>
+<div class="example">
+<a name="idp9516368"></a><p class="title"><b>Example 12. C module with a function</b></p>
+<div class="example-contents"><pre class="programlisting">
+#include &lt;glib.h&gt;
+#include &lt;seed-module.h&gt;
+/* Our function, with the signature of SeedFunctionCallback(); say hello! */
+SeedValue say_hello_to(SeedContext ctx,
+                       SeedObject function,
+                       SeedObject this_object,
+                       gsize argument_count,
+                       const SeedValue arguments[],
+                       SeedException *exception)
+{
+    guchar * name;
+ 
+    /* Check that only one argument was passed into the function.
+       CHECK_ARG_COUNT() is from seed-module.h, which you might find useful. */
+    CHECK_ARG_COUNT("hello.say_hello_to", 1);
+ 
+    /* Convert the first argument, a <a class="link" href="seed-Native-Type-Conversion.html#SeedValue" title="SeedValue">SeedValue</a>, to a C string */
+    name = seed_value_to_string(ctx, arguments[0], exception);
+ 
+    g_print("Hello, %s!\n", name);
+ 
+    g_free(name);
+ 
+    return seed_make_null(ctx);
+}
+ 
+/* Define an array of seed_static_function */
+seed_static_function gettext_funcs[] = {
+    {"say_hello_to", say_hello_to, 0}
+};
+ 
+SeedObject seed_module_init(SeedEngine * eng)
+{
+    SeedGlobalContext ctx = eng-&gt;context;
+ 
+    /* Create a new class definition with our array of static functions */
+    seed_class_definition ns_class_def = seed_empty_class;
+    ns_class_def.static_functions = example_funcs;
+ 
+    /* Create a class from the class definition we just created */
+    SeedClass ns_class = seed_create_class(&amp;ns_class_def);
+ 
+    /* Instantiate the class; this instance will be the namespace we return */
+    ns_ref = seed_make_object (ctx, ns_class, NULL);
+    seed_value_protect (ctx, ns_ref);
+ 
+    return ns_ref;
+}
+</pre></div>
+</div>
+<br class="example-break"><p>After building and installing this module (look in the Seed build system for examples of how to get this to work, as well as a copy of seed-module.h, which will be very useful), it will be loadable with the normal Seed import system. Assuming it's installed as libseed_hello.so:</p>
+<div class="example">
+<a name="idp6928144"></a><p class="title"><b>Example 13. Utilize our second example C module from JavaScript</b></p>
+<div class="example-contents"><pre class="programlisting">
+hello = imports.hello;
+hello.say_hello_to("Tim");
+</pre></div>
+</div>
+<br class="example-break">
+</div>
+<div class="refsect1">
+<a name="seed-Modules.details"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="CHECK-ARG-COUNT:CAPS"></a><h3>CHECK_ARG_COUNT()</h3>
+<pre class="programlisting">#define             CHECK_ARG_COUNT(name, argnum)</pre>
+<p>
+Check that the required number of arguments were passed into a
+<a class="link" href="seed-Native-Functions.html#SeedFunctionCallback" title="SeedFunctionCallback ()"><span class="type">SeedFunctionCallback</span></a>. If this is not true, raise an exception and
+return <code class="literal">NULL</code>. This requires the callback to use "argument_count",
+"ctx", and "exception" as the names of the various function arguments.
+</p>
+<p>
+<em class="parameter"><code>name</code></em> should be of form "namespace.function_name"
+</p>
+<p>
+At the moment, there is no way to specify more than one acceptable
+argument count.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>name</code></em> :</span></p></td>
+<td>The name of the function being called from, pretty-printed</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>argnum</code></em> :</span></p></td>
+<td>The number of arguments which should be passed into the function</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="DEFINE-ENUM-MEMBER:CAPS"></a><h3>DEFINE_ENUM_MEMBER()</h3>
+<pre class="programlisting">#define             DEFINE_ENUM_MEMBER(holder, member)</pre>
+<p>
+Defines a property on <em class="parameter"><code>holder</code></em> which is named the same as <em class="parameter"><code>member</code></em>, and
+is assigned the value that <em class="parameter"><code>member</code></em> has in C.
+</p>
+<p>
+This macro works for defining properties from constants and
+#defines as well.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>holder</code></em> :</span></p></td>
+<td>The object on which to define the enum member</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>member</code></em> :</span></p></td>
+<td>The enum member, as it is named in C</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="DEFINE-ENUM-MEMBER-EXT:CAPS"></a><h3>DEFINE_ENUM_MEMBER_EXT()</h3>
+<pre class="programlisting">#define             DEFINE_ENUM_MEMBER_EXT(holder, name, val)</pre>
+<p>
+Defines a property on <em class="parameter"><code>holder</code></em> which is named <em class="parameter"><code>name</code></em>, and is assigned the
+value that <em class="parameter"><code>member</code></em> has in C. This allows for an override of the enum
+member's name, most often to remove a common prefix. For example, to declare
+a property named VERSION_MAJOR on the namespace from mfpr's version
+constant MPFR_VERSION_MAJOR:
+</p>
+<p>
+</p>
+<pre class="programlisting">
+DEFINE_ENUM_MEMBER_EXT(ns, "VERSION_MAJOR", MPFR_VERSION_MAJOR);
+</pre>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>holder</code></em> :</span></p></td>
+<td>The object on which to define the enum member</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>name</code></em> :</span></p></td>
+<td>The enum member, as it should be named in JavaScript</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>val</code></em> :</span></p></td>
+<td>The enum member, as it is named in C</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="SeedModuleInitCallback"></a><h3>SeedModuleInitCallback ()</h3>
+<pre class="programlisting"><a class="link" href="seed-JS-Objects.html#SeedObject" title="SeedObject"><span class="returnvalue">SeedObject</span></a>          (*SeedModuleInitCallback)           (<em class="parameter"><code><a class="link" href="seed-Initialization.html#SeedEngine" title="struct SeedEngine"><span class="type">SeedEngine</span></a> *eng</code></em>);</pre>
+<p>
+</p>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.18</div>
+</body>
+</html>

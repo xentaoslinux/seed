@@ -1,0 +1,13 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+bindir=@bindir@
+includedir=@includedir@
+
+Cflags: -I${includedir}/seed@SEED_GTK_VERSION@
+Requires: @WEBKIT_PC@ gobject-introspection-1.0 glib-2.0 gobject-2.0 gmodule-2.0 gthread-2.0
+Libs: -L${libdir} -lseed@SEED_GTK_VERSION@
+
+Name: Seed
+Description: Seed Javascript Interpreter.
+Version: @VERSION@

@@ -1,0 +1,18 @@
+Description: Fix FTBFS when compiled -Werror=format-security flag
+Author: Laurent Bigonville <bigon@debian.org>
+Bug: https://bugzilla.gnome.org/show_bug.cgi?id=710658
+
+--- a/libseed/seed-types.c
++++ b/libseed/seed-types.c
+@@ -1211,10 +1211,8 @@ seed_value_from_gi_argument_full (JSCont
+         if ((key_type_tag != GI_TYPE_TAG_UTF8) &&
+             (key_type_tag != GI_TYPE_TAG_FILENAME))
+           {
+-            char *error_message = g_strdup_printf ("Unable to make object from hash table indexed with values of type %s", g_type_tag_to_string (key_type_tag));
+             seed_make_exception (ctx, exception, "ArgumentError",
+-                                 error_message);
+-            g_free (error_message);
++                                 "Unable to make object from hash table indexed with values of type %s", g_type_tag_to_string (key_type_tag));
+             return JSValueMakeNull (ctx);
+           }
+ 

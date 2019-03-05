@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>SQLite</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="Seed Reference Manual">
+<link rel="up" href="modules.html" title="Part IV. Seed Module Reference">
+<link rel="prev" href="readline-module.html" title="readline">
+<link rel="next" href="GtkBuilder-module.html" title="GtkBuilder">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2"><tr valign="middle">
+<td><a accesskey="p" href="readline-module.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="modules.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Seed Reference Manual</th>
+<td><a accesskey="n" href="GtkBuilder-module.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="chapter">
+<div class="titlepage"><div>
+<div><h2 class="title">
+<a name="sqlite-module"></a>SQLite</h2></div>
+<div><div class="author">
+<h3 class="author">
+<span class="firstname">Robert</span> <span class="surname">Carr</span>
+</h3>
+<div class="affiliation"><div class="address"><p><br>
+	  <code class="email">&lt;<a class="email" href="mailto:racarr@gnome.org">racarr@<em class="parameter"><code>gnome.org</code></em></a>&gt;</code><br>
+	</p></div></div>
+</div></div>
+</div></div>
+<div class="refsect1">
+<a name="idp9619168"></a><h2>API Reference</h2>
+<p>
+      The sqlite module allows for manipulation and querying of sqlite databases.
+      </p>
+<pre class="programlisting">
+sqlite = imports.sqlite;
+      </pre>
+<p>
+    </p>
+    
+    The SQLite module provides a selection of status enums, to be used as the return values of functions. For meanings, consult the SQLite C documentation.
+    <pre class="programlisting">
+sqlite.[OK, ERROR, INTERNAL, PERM ABORT, BUSY,
+        LOCKED, NOMEM, READONLY, INTERRUPT, CORRUPT,
+        NOTFOUND, FULL, CANTOPEN, PROTOCOL, EMPTY,
+        SCHEMA, TOOBIG, CONSTRAINT, MISMATCH, MISUSE,
+        NOLFS, AUTH, FORMAT, RANGE, NOTADB, ROW, DONE]
+    </pre>
+<p>
+</p>
+<div class="refsect2">
+<a name="sqlite-database"></a><h3>new sqlite.Database(filename)</h3>
+<p>Constructs a new sqlite.Database</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>filename</code></em></span></p></td>
+<td>undefined</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span></span></p></td>
+<td>A new sqlite.Database object, the <em class="parameter"><code>status</code></em> property will be one of the SQLite status enums</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p>
+</p>
+<hr>
+<div class="refsect2">
+<a name="sqlite-exec"></a><h3>database.exec(command, callback)</h3>
+<p>Executes the SQLite <em class="parameter"><code>command</code></em> on the given database. If <em class="parameter"><code>callback</code></em> is defined, it is called with each table entry from the given command, with a single argument. The argument has properties for each value in the returned table entry.</p>
+<p>Keep in mind that, just like in C, it is necessary to sanitize user input in your SQL before passing it to the database.</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>command</code></em></span></p></td>
+<td>undefined</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>callback</code></em></span></p></td>
+<td>undefined</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span></span></p></td>
+<td>An SQLite status enum representing the result of the operation</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p>
+</p>
+<hr>
+<div class="refsect2">
+<a name="sqlite-close"></a><h3>database.close()</h3>
+<p>Closes an SQLite database and syncs</p>
+</div>
+<p>
+</p>
+</div>
+<div class="refsect1">
+<a name="idp6699632"></a><h2>Examples</h2>
+<p>Below are several examples of using the Seed sqlite module. For additional resources, consult the examples/ folder of the Seed source</p>
+<div class="example">
+<a name="readline-repl-example"></a><p class="title"><b>Example 15. </b></p>
+<div class="example-contents">
+<p>This demonstrates creating a new table, populating it, and querying it for results</p>
+<pre class="programlisting">
+sqlite = imports.sqlite;
+var db = new sqlite.Database("people.db");
+db.exec("create table people (key INTEGER PRIMARY KEY, name TEXT," +
+                             "age INTEGER, phone TEXT);");
+db.exec("insert into people(name, age, phone) " + 
+        "values('John Smith', 24, '555-123-4567');");
+
+function cb_print_phone(results) {
+    print(results.phone);
+}
+
+db.exec("select * from people where name='John Smith';", cb_print_phone);
+db.close();
+      </pre>
+</div>
+</div>
+<br class="example-break">
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.18</div>
+</body>
+</html>

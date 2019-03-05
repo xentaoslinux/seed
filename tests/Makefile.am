@@ -1,0 +1,3 @@
+SUBDIRS = javascript c
+EXTRA_DIST = COPYING
+
